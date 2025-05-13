@@ -1,5 +1,5 @@
-## MorphoTax: A set of functions compiled to analyze morphological data for taxonomic studies
-### Description
+## MorphoTax
+This R package contains a collection of functions designed to provide a transparent and reproducible pipeline for analyzing morphological data in taxonomic studies.
 
 ### Installation
 ```
@@ -17,3 +17,5 @@ for (pkg in req.pkgs) {
 ## Install "MorphoTax"
 install_github("csupsup/MorphoTax")
 ```
+### Using the package
+In progress ...
