@@ -4,7 +4,7 @@
 \alias{summarize_morph}
 \title{Summarize Morphological Data}
 \usage{
-summarize_morph(data, grp = "Pop")
+summarize_morph(data, grp = NULL)
 }
 \arguments{
 \item{data}{A data frame with population or species label and sex information in the first two columns, followed by morpholigcal data.}

@@ -17,38 +17,60 @@
 #' @return A data frame containing summary statistics of all morphological data for every population or species.
 #' @export
 
-summarize_morph <- function(data, grp = "Pop") {
+summarize_morph <- function(data, grp = NULL) {
   ## Check if input is a data frame
   if (!is.data.frame(data)) {
     stop("Error: The input 'data' must be a data frame.")
   }
-  
-  ## Check if the population column exists in the data frame
+
+  if (is.null(grp)) {
+    grp <- names(data)[1]
+  }
+
+  ## Check if the grp exists in the data frame
   if (!(grp %in% colnames(data))) {
     stop(paste("Error: The column name '", grp, "' does not exist in the data frame.", sep = ""))
   }
   
-  ## Initialize empty data frame for results
-  sum.res <- data.frame()
-
-  ## Loop through columns
-  for(col in data[, 2:ncol(data)]) {
-    res <- describeBy(col, group = data[[grp]], mat = TRUE)
-    sum.res <- rbind(sum.res, res)
+  groups <- unique(data[[grp]])
+  numeric_vars <- names(data)[sapply(data, is.numeric)]
+  
+  results <- list()
+  
+  for (grp in groups) {
+    subset_data <- data[data[[grp]] == grp, ]
+    
+    for (var in numeric_vars) {
+      vals <- subset_data[[var]]
+      n_samples <- sum(!is.na(vals))  # Count of non-NA values
+      
+      min_val <- round(min(vals, na.rm = TRUE), 4)
+      median_val <- round(median(vals, na.rm = TRUE), 4)
+      max_val <- round(max(vals, na.rm = TRUE), 4)
+      mean_val <- round(mean(vals, na.rm = TRUE), 4)
+      sd_val <- round(sd(vals, na.rm = TRUE), 4)
+      Q1 <- round(quantile(vals, 0.25, na.rm = TRUE), 4)
+      Q3 <- round(quantile(vals, 0.75, na.rm = TRUE), 4)
+      
+      stats <- list(
+        group = grp,
+        variable = var,
+        n = n_samples,
+        min = min_val,
+        median = median_val,
+        max = max_val,
+        mean_sd = sprintf("%.4f ± %.4f", mean_val, sd_val),
+        Q1 = Q1,
+        Q3 = Q3
+      )
+      
+      results[[length(results) + 1]] <- stats
+    }
   }
-
-  ## Rename character names based on column names
-  morph.name <- colnames(data[2:ncol(data)])
   
-  ## Get the number of unique populations
-  pop <- length(unique(data[[grp]]))
-  
-  ## Repeat morphological names for each population
-  morph.name <- as.data.frame(rep(morph.name, each = pop))
-  colnames(morph.name)[1] <- "char"
+  df <- do.call(rbind, lapply(results, as.data.frame))
+  rownames(df) <- NULL
 
-  ## Add the 'item' column to the summary data frame
-  sum.res$item <- morph.name$char
-
-  return(sum.res)
+  ## Return data summary
+  return(df)
 }
