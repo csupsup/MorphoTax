@@ -65,8 +65,8 @@ summarize_morph <- function(data, grp = NULL) {
         median = median_val,
         max = max_val,
         mean_sd = sprintf("%.4f \u00b1 %.4f", mean_val, sd_val),
-        Q1 = Q1,
-        Q3 = Q3
+        q1 = Q1,
+        q3 = Q3
       )
       
       results[[length(results) + 1]] <- stats
