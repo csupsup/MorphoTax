@@ -7,16 +7,16 @@
 #' @param dir A directory that contains the results of Tukey and Dunn tests.
 #'
 #' @examples
-#' comb.pvals <- system.file("extdata", "tk_res", package = "morphR")
+#' comb.pvals <- system.file("extdata", "tk_res", package = "MorphoTax")
 #'
 #' @importFrom dplyr full_join
 #' @importFrom utils read.csv
+#' @importFrom tools file_path_sans_ext
 #' @return A data frame containing the combined p-values.
 #' @export
 
 combine_pvals <- function(dir) {
-  library(dplyr)
-  
+
   # Helper function to standardize comparisons
   standardize <- function(x) {
     x <- gsub("[-]", " - ", x)
@@ -48,14 +48,14 @@ combine_pvals <- function(dir) {
     data <- data[, c("Normalized_Comparison", pval_col)]
     
     # Rename p-value column using file name (without extension)
-    pval_name <- tools::file_path_sans_ext(basename(file))
+    pval_name <- file_path_sans_ext(basename(file))
     names(data)[2] <- paste0("pvalue_", pval_name)
     
     data_list[[length(data_list) + 1]] <- data
   }
   
   # Combine all data frames using full joins
-  combined_data <- Reduce(function(x, y) dplyr::full_join(x, y, by = "Normalized_Comparison"), data_list)
+  combined_data <- Reduce(function(x, y) full_join(x, y, by = "Normalized_Comparison"), data_list)
   
   return(combined_data)
 }

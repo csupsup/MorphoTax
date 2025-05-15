@@ -6,7 +6,7 @@
 #' @param col.names A vector containing the names of the columns to reorder. If column names are not included, those will be dropped.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #' cols <- c("SVL", "TD", "OD")
 #'

@@ -6,7 +6,7 @@
 #' @param data A dataframe with population and sex information in the first two columns, followed by morphology data.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' 
 #' filtered.data <- filter_sex(data) 
 #'

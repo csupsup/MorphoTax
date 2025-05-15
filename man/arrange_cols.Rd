@@ -18,7 +18,7 @@ A data frame containing the reordered columns.
 A function to reorder columns in morphology data, except for the first one i.e., population or species column.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 cols <- c("SVL", "TD", "OD")
 

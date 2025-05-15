@@ -22,7 +22,7 @@ A data frame summarizing the results of Levene's test for each sex within a popu
 A function to test homogeneity of variance in each sex within each population using Levene's test.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 levene.res <- levene_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
 

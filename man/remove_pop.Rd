@@ -21,7 +21,7 @@ A filtered data frame.
 A function to remove populations with small samples or individuals.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 filtered.data <- remove_pop(data, grp = "Pop", threshold = 4)
 

@@ -17,7 +17,7 @@ A function to filter data by excluding populations represented by only one sex.
 Additionally, it filters sex data within each population with fewer than three samples.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 filtered.data <- filter_sex(data) 
 

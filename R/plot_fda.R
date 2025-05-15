@@ -9,7 +9,7 @@
 #' @param accu Logical. If TRUE, it prints the accuracy of classification based on confusion matrix.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)
@@ -104,8 +104,8 @@ plot_fda <- function(data, fixed.shape = NULL, point.color = NULL, split = NULL,
           plot.title = element_blank(), 
           axis.text = element_text(size = 15, color = "black"), 
           axis.title = element_text(size = 15)) +
-    scale_y_continuous(breaks = scales::breaks_pretty()) +
-    scale_x_continuous(breaks = scales::breaks_pretty())
+    scale_y_continuous(breaks = breaks_pretty()) +
+    scale_x_continuous(breaks = breaks_pretty())
 
   ## Accuracy
   if (accu) {

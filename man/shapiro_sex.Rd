@@ -20,7 +20,7 @@ A data frame summarizing the results of Shapiro-Wilk Test for each sex within a 
 A function to test normality of data in each sex within each population using Shapiro-Wilk Test.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 shapiro.res <- shapiro_sex(data, sex = "Sex", grp = "Pop")
 

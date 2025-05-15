@@ -10,7 +10,7 @@
 #' @param type String. Data type:  "single_pop", "multi_pop" and "species".
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' adj.data <- adjust_morph(data, type = "multi_pop")
@@ -23,10 +23,12 @@
 #'
 #' @importFrom stats lm
 #' @importFrom stats coef
+#' @importFrom dplyr bind_rows
 #' @return A data frame containing the adjusted morphological data.
 #' @export
 
 adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
+    
   ## Option to handle both single population and multiple populations
   type <- match.arg(type)
   
@@ -75,7 +77,7 @@ adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
     }
     
     ## Convert adjusted data into one dataframe
-    final_data <- dplyr::bind_rows(adjusted_data_list)
+    final_data <- bind_rows(adjusted_data_list)
     
   } else if (type == "single_pop") {
     ## Obtain data (assuming one population)
@@ -150,7 +152,7 @@ adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
     }
     
     ## Convert adjusted data into one dataframe
-    final_data <- dplyr::bind_rows(adjusted_data_list)
+    final_data <- bind_rows(adjusted_data_list)
     
   }
 

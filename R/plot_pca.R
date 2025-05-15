@@ -7,7 +7,7 @@
 #' @param point.color A vector specifying the point color for each population or species. If NULL, random colors will be used
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)
@@ -21,38 +21,40 @@
 #' @importFrom magrittr %>%
 #' @importFrom tibble as_tibble
 #' @importFrom dplyr bind_cols rename
+#' @importFrom scales breaks_pretty
+#' @importFrom RColorBrewer brewer.pal
 #' @return A biplot showing the results of FDA.
 #' @export
 
 plot_pca <- function(data, fixed.shape = NULL, point.color = NULL) {
-  # Ensure 'data' is a data frame and has the necessary columns
+  ## Ensure 'data' is a data frame and has the necessary columns
   if (!is.data.frame(data)) stop("The input data must be a data frame")
   
-  # Perform PCA
+  ## Perform PCA
   pca.res <- prcomp(data[2:ncol(data)], center = TRUE, scale. = TRUE)
 
   # Get PCA axes values
   pca.pts.load <- as_tibble(pca.res$x) %>% 
-    dplyr::bind_cols(data$Pop) %>%
-    dplyr::rename(Pop = ncol(.))
+    bind_cols(data$Pop) %>%
+    rename(Pop = ncol(.))
 
-  # Prepare PCA data
+  ## Prepare PCA data
   pca.data <- subset(pca.pts.load, select = c(ncol(pca.pts.load), 1:2))
   names(pca.data)[1] <- "grp"
   pca.data$grp <- as.factor(pca.data$grp)
 
-  # Get unique group labels
+  ## Get unique group labels
   pop.lab <- unique(pca.data$grp)
   num.pops <- length(pop.lab)
 
-  # Set color palette
+  ## Set color palette
   if (is.null(point.color)) {
     map.color <- colorRampPalette(brewer.pal(9, "PuBu"))(num.pops)
   } else {
     map.color <- point.color[as.character(pop.lab)]
   }
 
-  # Set shape palette
+  ## Set shape palette
   if (is.null(fixed.shape)) {
     set.seed(123)
     point.shape <- sample(1:25, length(pop.lab), replace = TRUE)
@@ -60,7 +62,7 @@ plot_pca <- function(data, fixed.shape = NULL, point.color = NULL) {
     point.shape <- fixed.shape[as.character(pop.lab)]
   }
 
-  # Create the PCA plot
+  ## Create the PCA plot
   plot_obj <- ggplot(pca.data, aes(x = PC1, y = PC2, color = grp, shape = grp)) +
     geom_point(size = 3) +
     scale_color_manual(values = map.color) + 
@@ -79,8 +81,8 @@ plot_pca <- function(data, fixed.shape = NULL, point.color = NULL) {
       axis.text = element_text(size = 15, color = "black"),
       axis.title = element_text(size = 15)
     ) +
-    scale_y_continuous(breaks = scales::breaks_pretty()) +
-    scale_x_continuous(breaks = scales::breaks_pretty())
+    scale_y_continuous(breaks = breaks_pretty()) +
+    scale_x_continuous(breaks = breaks_pretty())
 
   return(plot_obj)
 }

@@ -22,7 +22,7 @@ A data frame containing the results of T-test.
 A function to test differences in characters between sexes with each population using independent T-test.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 t.test.res <- t_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
 

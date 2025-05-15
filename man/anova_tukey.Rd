@@ -23,7 +23,7 @@ A function to perform ANOVA on all morphological data across populations or spec
 Also, if a significant result is detected, it automatically performs Tukey Test.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 aov.res <- anova_tukey(data, grp = "Pop", write.tk = TRUE, dir = NULL)

@@ -22,7 +22,7 @@ The \emph{"multi_pop"} option considers all data from one species, while the slo
 The \emph{"species"} option considers each unique group as a single species; therefore, the slope is calculated for each using their respective mean.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 adj.data <- adjust_morph(data, type = "multi_pop")

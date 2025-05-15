@@ -29,8 +29,8 @@ All input CSV files should be located in a folder where each file has a prefix "
 Each file contains the results of a test on a certain character, for example, "tk_SVL_results.csv."
 }
 \examples{
-tk_dir <- system.file("extdata", "tk_res", package = "morphR")
-dn_dir <- system.file("extdata", "dn_res", package = "morphR")
+tk_dir <- system.file("extdata", "tk_res", package = "MorphoTax")
+dn_dir <- system.file("extdata", "dn_res", package = "MorphoTax")
 
 clean_pvals(tk.dir = tk_dir, dn.dir = dn_dir, 
          output.file = "cleaned_pvals.csv", asterisk = FALSE)

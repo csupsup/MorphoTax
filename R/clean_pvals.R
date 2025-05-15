@@ -10,13 +10,14 @@
 #' @param asterisk Logical (TRUE or FALSE). If TRUE, it adds an asterisk symbol to a significant p-value.
 #'
 #' @examples
-#' tk_dir <- system.file("extdata", "tk_res", package = "morphR")
-#' dn_dir <- system.file("extdata", "dn_res", package = "morphR")
+#' tk_dir <- system.file("extdata", "tk_res", package = "MorphoTax")
+#' dn_dir <- system.file("extdata", "dn_res", package = "MorphoTax")
 #'
 #' clean_pvals(tk.dir = tk_dir, dn.dir = dn_dir, 
 #'          output.file = "cleaned_pvals.csv", asterisk = FALSE)
 #'
 #' @importFrom utils read.csv
+#' @importFrom tools file_path_sans_ext
 #' @return A data frame containing p-values for all population or species comparisons.
 #' @export
 
@@ -65,7 +66,7 @@ clean_pvals <- function(tk.dir = "tk_path", dn.dir = "dn_path",
     ## Process each file
     lapply(file.list, function(file) {
       ## Define processed file name
-      processed_file <- file.path(directory, paste0(tools::file_path_sans_ext(basename(file)), "_processed.csv"))
+      processed_file <- file.path(directory, paste0(file_path_sans_ext(basename(file)), "_processed.csv"))
       
       ## If processed file already exists, overwrite it
       data <- read.csv(file)
@@ -87,7 +88,7 @@ clean_pvals <- function(tk.dir = "tk_path", dn.dir = "dn_path",
   ## Get p-values from Tukey test
   tk.tests <- list.files(tk.dir, pattern = '_processed.csv', full.names = TRUE)
   tk.pval <- as.data.frame(lapply(tk.tests, function(x) read.csv(x)$p.adj))
-  names(tk.pval) <- tools::file_path_sans_ext(basename(tk.tests))
+  names(tk.pval) <- file_path_sans_ext(basename(tk.tests))
   
   ## Fix column names for Tukey p-values
   colnames(tk.pval) <- gsub("^tk_(.*?)_results.*", "\\1", colnames(tk.pval))
@@ -95,7 +96,7 @@ clean_pvals <- function(tk.dir = "tk_path", dn.dir = "dn_path",
   ## Get p-values from Dunn test
   dn.tests <- list.files(dn.dir, pattern = '_processed.csv', full.names = TRUE)
   dn.pval <- as.data.frame(lapply(dn.tests, function(x) read.csv(x)$P.adj))
-  names(dn.pval) <- tools::file_path_sans_ext(basename(dn.tests))
+  names(dn.pval) <- file_path_sans_ext(basename(dn.tests))
   
   ## Fix column names for Dunn p-values
   colnames(dn.pval) <- gsub("^dn_(.*?)_results.*", "\\1", colnames(dn.pval))

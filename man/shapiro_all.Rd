@@ -18,7 +18,7 @@ A data frame summarizing the results of Shapiro-Wilk Test.
 A function to test normality of all morphological data using Shapiro-Wilk Test.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 shapiro.res <- shapiro_all(data, grp = "Pop")

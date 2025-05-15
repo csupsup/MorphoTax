@@ -8,7 +8,7 @@
 #' @param grp String. Column name for population or species.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #'
 #' levene.res <- levene_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
 #'

@@ -12,7 +12,7 @@
 #' @param pop.order A vector specifying the order of populations to be shown in the plot legend.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)
@@ -26,6 +26,7 @@
 #' @importFrom stats setNames
 #' @importFrom ggplot2 geom_tile scale_fill_manual
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom scales breaks_pretty
 #' @return A plot showing the svm boundary for predicted classes.
 #' @export
 

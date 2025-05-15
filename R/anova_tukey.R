@@ -9,7 +9,7 @@
 #' @param dir A directory where the Tukey test results will be stored.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' aov.res <- anova_tukey(data, grp = "Pop", write.tk = TRUE, dir = NULL)

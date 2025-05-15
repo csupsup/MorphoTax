@@ -24,7 +24,7 @@ the principal components (directions) that maximizes the variance in the dataset
 the variance explained of the first two components, extracts the variable and point loadings and writes them to csv files.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 pca.res <- run_pca(data, prop.var = TRUE, var.load = TRUE, pts.load = TRUE)

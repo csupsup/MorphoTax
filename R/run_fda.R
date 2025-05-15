@@ -11,7 +11,7 @@
 #' @param split Numeric. Proportion of data to be assigned as training data. If NULL, all data will be used as training set.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' fda.res <- run_fda(data, con.mat = TRUE, coef = TRUE, accu = TRUE, split = 0.7)

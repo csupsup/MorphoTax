@@ -23,7 +23,7 @@ A function to perform Kruskal-Wallis test on all morphological data.
 Also, if a significant result is detected, it automatically performs Dunn Test with a Bonferroni adjustment for p-values.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 kw.res <- kw_dunn(data, grp = "Pop", write.dunn = TRUE, dir = NULL)

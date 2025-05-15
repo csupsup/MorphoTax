@@ -8,7 +8,7 @@
 #' Populations with fewer than this number will be removed. Default is 4.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' 
 #' filtered.data <- remove_pop(data, grp = "Pop", threshold = 4)
 #' 

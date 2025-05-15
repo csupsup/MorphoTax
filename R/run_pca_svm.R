@@ -12,7 +12,7 @@
 #' @param pop.order A vector specifying the order of populations to be shown in the plot legend.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)
@@ -30,6 +30,8 @@
 #' @importFrom caret trainControl train confusionMatrix
 #' @importFrom stats setNames
 #' @importFrom ggplot2 geom_tile scale_fill_manual
+#' @importFrom scales breaks_pretty
+#' @importFrom RColorBrewer brewer.pal
 #' @return A plot showing the svm boundary for predicted classes.
 #' @export
 
@@ -47,7 +49,7 @@ run_pca_svm <- function(data, point.shape = NULL, class.color = NULL, pop.order 
 
   ## Load PCA scores and add class labels
   pca.pts.load <- as_tibble(pca.res$x[, 1:2]) %>%
-    dplyr::mutate(Pop = data$Pop)
+    mutate(Pop = data$Pop)
 
   pca.axes <- pca.pts.load
 
@@ -115,8 +117,8 @@ run_pca_svm <- function(data, point.shape = NULL, class.color = NULL, pop.order 
           plot.title = element_blank(),
           axis.text = element_text(size = 15, color = "black"),
           axis.title = element_text(size = 15)) +
-    scale_y_continuous(breaks = scales::breaks_pretty()) +
-    scale_x_continuous(breaks = scales::breaks_pretty()) 
+    scale_y_continuous(breaks = breaks_pretty()) +
+    scale_x_continuous(breaks = breaks_pretty()) 
     
   return(plotobj)
 }

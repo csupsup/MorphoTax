@@ -6,14 +6,14 @@
 #' @param grp String. Column name for population or species.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' sum.res <- esult <- summarize_morph(data, grp = "Pop")
 #'
 #' head(sum.res)
 #'
-#' @importFrom psych describeBy
+#' @importFrom stats median
 #' @return A data frame containing summary statistics of all morphological data for every population or species.
 #' @export
 
@@ -32,17 +32,22 @@ summarize_morph <- function(data, grp = NULL) {
     stop(paste("Error: The column name '", grp, "' does not exist in the data frame.", sep = ""))
   }
   
+  ## Check if grp is a factor or character variable
+  if (!is.factor(data[[grp]]) && !is.character(data[[grp]])) {
+    stop("Error: The grouping variable '", grp, "' must be a factor or character column.")
+  }
+
   groups <- unique(data[[grp]])
   numeric_vars <- names(data)[sapply(data, is.numeric)]
   
   results <- list()
   
-  for (grp in groups) {
-    subset_data <- data[data[[grp]] == grp, ]
+  for (group_name in groups) {
+    subset_data <- data[data[[grp]] == group_name, ]
     
     for (var in numeric_vars) {
       vals <- subset_data[[var]]
-      n_samples <- sum(!is.na(vals))  # Count of non-NA values
+      n_samples <- sum(!is.na(vals))
       
       min_val <- round(min(vals, na.rm = TRUE), 4)
       median_val <- round(median(vals, na.rm = TRUE), 4)
@@ -53,13 +58,13 @@ summarize_morph <- function(data, grp = NULL) {
       Q3 <- round(quantile(vals, 0.75, na.rm = TRUE), 4)
       
       stats <- list(
-        group = grp,
+        pop = group_name,
         variable = var,
         n = n_samples,
         min = min_val,
         median = median_val,
         max = max_val,
-        mean_sd = sprintf("%.4f ± %.4f", mean_val, sd_val),
+        mean_sd = sprintf("%.4f \u00b1 %.4f", mean_val, sd_val),
         Q1 = Q1,
         Q3 = Q3
       )
@@ -74,3 +79,4 @@ summarize_morph <- function(data, grp = NULL) {
   ## Return data summary
   return(df)
 }
+

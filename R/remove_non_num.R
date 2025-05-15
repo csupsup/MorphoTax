@@ -7,7 +7,7 @@
 #' @param sum Logical. If TRUE, it prints the number and name of samples removed.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' 
 #' filtered.data <- remove_non_num(data, cols.range = 3:ncol(data), sum = TRUE)
 #' 

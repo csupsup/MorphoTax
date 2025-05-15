@@ -22,7 +22,7 @@ A filtered data frame.
 A function to remove juveniles based on specified threshold.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 filtered.data <- remove_juv(data, char = "SVL", threshold = 70, sum = TRUE)
 

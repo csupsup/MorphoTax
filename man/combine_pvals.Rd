@@ -18,6 +18,6 @@ All input CSV files should be located in a folder where each file has a prefix "
 Each file contains the results of a test on a certain character, for example, "tk_SVL_results.csv."
 }
 \examples{
-comb.pvals <- system.file("extdata", "tk_res", package = "morphR")
+comb.pvals <- system.file("extdata", "tk_res", package = "MorphoTax")
 
 }

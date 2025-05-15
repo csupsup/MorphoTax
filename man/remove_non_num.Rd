@@ -20,7 +20,7 @@ A filtered data frame.
 A function to remove samples (rows) with non-numeric or empty cells.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 filtered.data <- remove_non_num(data, cols.range = 3:ncol(data), sum = TRUE)
 

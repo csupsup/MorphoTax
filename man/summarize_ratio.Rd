@@ -24,7 +24,7 @@ A function to calculate and summarize the ratio of two morphological data. The s
 relative difference (e.g., |ED - SVL|/SV) * 100).
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 ratio.sum <- summarize_ratio(data, char.as.num = "TD", char.as.den = "SVL", grp = "Pop")
 

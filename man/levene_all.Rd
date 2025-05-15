@@ -18,7 +18,7 @@ A data frame summarizing the results of Levene's test.
 A function to test homogeneity of variance in all morphological data using Levene's test.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 levene.res <- levene_all(data, grp = "Pop")
 

@@ -26,7 +26,7 @@ linear discriminant analysis. The function uses the 'fda' function from the 'mda
 extracts the coefficients, and calculates the accuracy based on confusion matrix.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 fda.res <- run_fda(data, con.mat = TRUE, coef = TRUE, accu = TRUE, split = 0.7)

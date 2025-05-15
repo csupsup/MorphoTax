@@ -9,7 +9,7 @@
 #' @param dir A directory where the Dunn test results will be stored.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
 #' kw.res <- kw_dunn(data, grp = "Pop", write.dunn = TRUE, dir = NULL)

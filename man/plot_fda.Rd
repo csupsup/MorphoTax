@@ -30,7 +30,7 @@ A biplot showing the results of FDA.
 A function to plot the first two dimensions of Flexible Discriminant Analaysis (FDA).
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)

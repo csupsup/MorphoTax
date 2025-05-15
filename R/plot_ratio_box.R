@@ -9,7 +9,7 @@
 #' @param y.title Custom label for y-axis.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' 
 #' box <- plot_ratio_box(data, char.as.num = "OD", char.as.den = "SVL", grp = "Pop", 
 #'                y.title = "Orbit Diameter/\nSnout–Vent Length")

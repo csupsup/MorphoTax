@@ -10,7 +10,7 @@
 #' @param q3 Numeric. Value for upper quartile. Default is set to 0.75.
 #'
 #' @examples
-#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+#' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' 
 #' filtered.data <- remove_outliers(data, char = "SVL", grp = "Pop", q1 = 0.25, q3 = 0.75)
 #' 

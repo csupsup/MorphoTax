@@ -26,7 +26,7 @@ The function uses the 'svm' function from the package 'e1071', implementing the 
 The function ouputs a plot showing the svm boundary for predicted classes.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)

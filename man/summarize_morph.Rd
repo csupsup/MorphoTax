@@ -18,7 +18,7 @@ A data frame containing summary statistics of all morphological data for every p
 A function to get the summary statistics of all morphological data.
 }
 \examples{
-data <- read.csv(system.file("extdata", "herp.data.csv", package = "morphR"))
+data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
 sum.res <- esult <- summarize_morph(data, grp = "Pop")
