@@ -20,6 +20,10 @@
 #' @return A filtered data frame.
 #' @export
 
+#' @importFrom stats quantile
+#' @return A filtered data frame.
+#' @export
+
 remove_outliers <- function(data, char = "SVL", grp = NULL, q1 = 0.25, q3 = 0.75) {
   if (is.null(grp)) {
     ## If no group is provided, treat all data as one group
@@ -40,7 +44,7 @@ remove_outliers <- function(data, char = "SVL", grp = NULL, q1 = 0.25, q3 = 0.75
     ## Message indicating outlier removal across the entire dataset
     message("Outlier removal applied across the entire dataset. ", num_removed, " samples removed.")
   } else {
-    ## If a grouping chariable is provided, calculate bounds for each group
+    ## If a grouping variable is provided, calculate bounds for each group
     Q1_values <- tapply(data[[char]], data[[grp]], function(x) quantile(x, q1, na.rm = TRUE))
     Q3_values <- tapply(data[[char]], data[[grp]], function(x) quantile(x, q3, na.rm = TRUE))
     IQR_values <- Q3_values - Q1_values
@@ -53,10 +57,10 @@ remove_outliers <- function(data, char = "SVL", grp = NULL, q1 = 0.25, q3 = 0.75
     is_outlier <- data[[char]] < lower_bound[data[[grp]]] | data[[char]] > upper_bound[data[[grp]]]
 
     ## Calculate the number of samples removed per group
-    num_removed_per_group <- tapply(is_outlier, data[[grp]], sum, na.rm = TRUE)
+    num_removed_per_group <- tapply(is_outlier, data[[grp]], function(x) sum(x, na.rm = TRUE))
 
     ## Print number of samples removed per group
-    message("Outlier removal applied per ", grp,".")
+    message("Outlier removal applied per ", grp, ".")
     for (group in names(num_removed_per_group)) {
       message("Group '", group, "' removed ", num_removed_per_group[group], " samples.")
     }
