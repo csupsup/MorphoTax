@@ -1,5 +1,5 @@
 ## MorphoTax
-This R package contains a collection of functions designed to provide a transparent and reproducible pipeline for analyzing morphological data in taxonomic studies.
+This R package contains a collection of functions compiled to provide a transparent and reproducible pipeline for analyzing morphological data in taxonomic studies.
 
 ### Installation
 ```
