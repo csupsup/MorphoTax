@@ -5,6 +5,7 @@
 #' @param data A data frame with population or species label in the first column, followed by morpholigcal data.
 #' @param fixed.shape A vector specifying the point shape for each population or species. If NULL, random points will be used.
 #' @param point.color A vector specifying the point color for each population or species. If NULL, random colors will be used
+#' @param ellipse Logical. If TRUE, it adds 95% confidence ellipses. Default TRUE.
 #'
 #' @examples
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
@@ -23,17 +24,18 @@
 #' @importFrom dplyr bind_cols rename
 #' @importFrom scales breaks_pretty
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom ggplot2 stat_ellipse
 #' @return A biplot showing the results of FDA.
 #' @export
 
-plot_pca <- function(data, fixed.shape = NULL, point.color = NULL) {
+plot_pca <- function(data, fixed.shape = NULL, point.color = NULL, ellipse = TRUE) {
   ## Ensure 'data' is a data frame and has the necessary columns
   if (!is.data.frame(data)) stop("The input data must be a data frame")
   
   ## Perform PCA
   pca.res <- prcomp(data[2:ncol(data)], center = TRUE, scale. = TRUE)
 
-  # Get PCA axes values
+  ## Get PCA axes values
   pca.pts.load <- as_tibble(pca.res$x) %>% 
     bind_cols(data$Pop) %>%
     rename(Pop = ncol(.))
@@ -50,6 +52,7 @@ plot_pca <- function(data, fixed.shape = NULL, point.color = NULL) {
   ## Set color palette
   if (is.null(point.color)) {
     map.color <- colorRampPalette(brewer.pal(9, "PuBu"))(num.pops)
+    names(map.color) <- pop.lab
   } else {
     map.color <- point.color[as.character(pop.lab)]
   }
@@ -58,11 +61,12 @@ plot_pca <- function(data, fixed.shape = NULL, point.color = NULL) {
   if (is.null(fixed.shape)) {
     set.seed(123)
     point.shape <- sample(1:25, length(pop.lab), replace = TRUE)
+    names(point.shape) <- pop.lab
   } else {
     point.shape <- fixed.shape[as.character(pop.lab)]
   }
 
-  ## Create the PCA plot
+  ## Plot PCA
   plot_obj <- ggplot(pca.data, aes(x = PC1, y = PC2, color = grp, shape = grp)) +
     geom_point(size = 3) +
     scale_color_manual(values = map.color) + 
@@ -83,6 +87,12 @@ plot_pca <- function(data, fixed.shape = NULL, point.color = NULL) {
     ) +
     scale_y_continuous(breaks = breaks_pretty()) +
     scale_x_continuous(breaks = breaks_pretty())
+
+  ## Add ellipses
+  if (ellipse) {
+    plot_obj <- plot_obj +
+      stat_ellipse(aes(group = grp), level = 0.95, type = "norm", linetype = 2)
+  }
 
   return(plot_obj)
 }
