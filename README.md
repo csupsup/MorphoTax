@@ -24,10 +24,10 @@ Supsup, C.E., Pitogo, K.M.P., Sanguila, M.B., Hallermann, J., Denzer, W., Wood J
 Species. Herpetological Monographs.
 
 ### Installation
-```
+```r
 ## Check and install required packages
-req.pkgs <- c("devtools", "ggplot2", "tibble", "dplyr", "car", "mda",
-                  "psych", "magrittr", "caret, "RColorBrewer")
+req.pkgs <- c("devtools", "ggplot2", "tibble", "dplyr", "car", "mda", "psych", "magrittr", "caret",
+ "RColorBrewer", "Rmisc", "rlang", "reshape2")
 
 for (pkg in req.pkgs) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
@@ -50,7 +50,7 @@ For a hands-on demonstration, we have included sample data (herp.data.csv), a su
 | Palawan | m   | 83.81 | 2.90 | 7.38 |11.28 |10.31 |22.87 |15.05 |41.58 |31.87 |73.18 |
 
 #### Load the package and access the sample data
-```
+```r
 ## Load the package
 library("MorphoTax")
 
@@ -63,7 +63,7 @@ data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 ### 1. Data filtering
 * Remove samples with missing data and non-numeric values.
-```
+```r
 filtered.data <- remove_non_num(data, cols.range = 3:ncol(data), sum = TRUE)
 # Number of samples removed: 0 
 # Remaining number of samples: 202 
@@ -71,17 +71,17 @@ filtered.data <- remove_non_num(data, cols.range = 3:ncol(data), sum = TRUE)
 # character(0)
 ```
 * Remove populations with small sample sizes. Default threshold is 4 samples per population.
-```
+```r
 filtered.data <- remove_pop(filtered.data, grp = "Pop", threshold = 4)
 # No populations were removed. All populations have at least 4 individuals.
 ```
 * Remove juveniles. The basis for removing juveniles here is SVL, with a threshold of 70 mm. Therefore, this will remove samples with less than 70 mm SVL. Adjust the threshold according to your data.
-```
+```r
 filtered.data <- remove_juv(filtered.data, char = "SVL", threshold = 70, sum = TRUE)
 # Number of samples removed: 0 
 ```
 * Remove outliers by using the interquartile range method with SVL as a reference character. We recommend performing this step after addressing the allometric effects (see below). Adjust the percentiles (i.e., q1, q3) as needed.
-```
+```r
 filtered.data <- remove_outliers(filtered.data , char = "SVL", grp = "Pop", q1 = 0.25, q3 = 0.75)
 # Outlier removal applied per Pop.
 # Group 'Luzon' removed 0 samples.
@@ -91,7 +91,7 @@ filtered.data <- remove_outliers(filtered.data , char = "SVL", grp = "Pop", q1 =
 
 ### 2. Data transformation
 The sample data consists of both mensural and meristic (countable traits) data. Apply only the removal of allometric effects to mensural data.
-```
+```r
 ## Get mensural data (columns 1–12)
 mensural <- subset(filtered.data, select = c(1:12))
 
@@ -124,7 +124,7 @@ cleaned.data <- cbind(adj.data, filtered.data[13:ncol(filtered.data)])
 
 ### 3. Data summary
 When obtaining summary statistics, it is entirely your choice whether to use the data with adjusted or raw mensural characters. For this example, let us use the data with adjusted mensural characters.
-```
+```r
 ## Summary statistics
 sum.res <- summarize_morph(cleaned.data, grp = "Pop")
 
@@ -157,7 +157,7 @@ head(ratio.sum)
 
 ### 4. Test for normality and homogeneity of variance
 As mentioned above, functions are provided to perform these tests when sex data is available (*shapiro_sex*, *levene_sex*) and when it is not (*shapiro_all*, *levene_all*).
-```
+```r
 ## Add sex information to the cleaned dataset
 sex.cleaned.data <- cbind(cleaned.data, filtered.data$Sex) # Sex is added to the last column
 colnames(sex.cleaned.data)[ncol(sex.cleaned.data)] <- "Sex" # Rename the sex column
@@ -229,7 +229,7 @@ head(levene.res)
 
 ### 5. Test for sexual dimorphism
 The test can be performed using a single character (e.g., char = “SVL”) or applied to all (all = TRUE). Ensure that you use the data with sex information.
-```
+```r
 ## Filter data by excluding populations represented by only one sex
 sex.cleaned.data <- filter_sex(sex.cleaned.data)
 
@@ -278,7 +278,7 @@ ggsave("svl_errorbar.png", plot = svl.bar, width = 5, height = 5, dpi = 300)
 ```
 <img src="man/figures/svl.errorbar.png" width="400"/>
 
-```
+```r
 ## T-test with all characters
 t.test.res <- t_test_sex(sex.cleaned.data, sex = "Sex", grp = "Pop", all = TRUE) # Set TRUE here
 
@@ -295,7 +295,7 @@ For the Wilcoxon test, simply replace the function "t_test_sex" with "wilcox_tes
 
 ### 6. Univariate analysis
 Before doing any univariate analysis, make sure each morphological character meets the necessary conditions for the test (e.g., equal variance for ANOVA). See the tutorial for details on the tests for normality and homogeneity of variance mentioned above.
-```
+```r
 ## Identify which characters have unequal variances according to Levene's test
 sig.morphs.f <- levene.res[levene.res$significance == "*", "Morph"]
 
@@ -353,7 +353,7 @@ aov.res$tukey_padj_matrix
 # 3 NA 0.143210546
 ```
 Note that the result for every character comparison is also written to your "tk_morph" directory as a CSV file. These CSV files are needed when you want to combine the results of both Tukey and Dunn's test to summarize the comparisons.
-```
+```r
 ## Perform Kruskal-Wallis test on characters with unequal variance
 chars <- c("Pop", sig.morphs.f) 
 df.unvar <- cleaned.data[, chars] # Retain "Pop" column along with character with unequal variance
@@ -389,7 +389,7 @@ kw.res$dunn_padj_matrix
 # 3 1.000000000  NA 8.369398e-01
 ```
 Combine all the results from Tukey and Dunn's tests.
-```
+```r
 ## Get and combine all p-values from individual results
 cleaned.pval <- clean_pvals(tk.dir = "tk_morph/", dn.dir = "dn_morph/", 
                     output.file = "cleaned_pvals.csv", asterisk = TRUE)
@@ -408,7 +408,7 @@ head(cleaned.pval)
 ## The asterisk indicates a significant result. You can disable this by setting "asterisk = FALSE"
 ```
 Visualize the comparisons.
-```
+```r
 ## Get combined p-values without asterisks
 cleaned.pval <- clean_pvals(tk.dir = "tk_morph/", dn.dir = "dn_morph/", 
                     output.file = "cleaned.pvals.csv", asterisk = FALSE)
@@ -430,7 +430,7 @@ ggsave("pval.dotplot.png", plot = pval, width = 10, height = 5, dpi = 300)
 When you perform FDA and PCA, use the dataset that passed through all of the filtering processes above. Make sure to remove the "Sex" column or subset the data if independent analysis is needed for each sex.
 
 * Perform FDA using the "cleaned.data". The argument below will generate the confusion matrix (con.mat), discriminant coefficients (coef), and classification accuracy (acc). These outputs are automatically saved as CSV files. The "split" option will allocate 70% of the data for training and the remaining 30% for testing. Adjust this as necessary.
-```
+```r
 fda.res <- run_fda(cleaned.data, con.mat = TRUE, coef = TRUE, accu = TRUE, split = 0.7)
 # [1] "Confusion matrix file written: fda_conf_mat_cleaned.data.csv"
 # [1] "Coefficient file written: fda_coef_cleaned.data.csv"
@@ -464,7 +464,7 @@ ggsave("fda.plot.png", plot = fda.plot, width = 7, height = 5, dpi = 300)
 <img src="man/figures/fda.plot.png" width="500"/>
 
 * For PCA, the output includes the proportion of variance (prop.var), variable loadings (var.load), and PCA scores (pc.scores). Similar to FDA, these are automatically saved as CSV files. 
-```
+```r
 pca.res <- run_pca(cleaned.data, prop.var = TRUE, var.load = TRUE, pc.scores = TRUE)
 # PC1 variance explained:28.62 %
 # PC2 variance explained:14.04 %
@@ -500,7 +500,7 @@ ggsave("pca.plot.png", plot = pca.plot, width = 7, height = 5, dpi = 300)
 We treat the delimitation of species boundaries in morphological space as a classification problem, which therefore requires a classification method. Here, we use the Support Vector Machine (SVM) algorithm to predict the number of classes or putative species. The SVM is implemented using the first two dimensions of FDA and PCA, which contain the most information on morphological data when reduced to lower dimensions. This way, noise from the data is minimized, allowing the SVM to perform well. Note that the function implements a 10-fold cross-validation to evaluate model performance.
 
 * Perform SVM on FDA
-```
+```r
 ## Assign custom shapes and colors
 point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)
 point.color <- c("Luzon" = "#000000", "Mindanao" = "#FF7F0E", "Palawan" = "#D62728")
@@ -565,7 +565,7 @@ ggsave("fda.svm.png", plot = fda.svm, width = 7, height = 5, dpi = 300)
 <img src="man/figures/fda.svm.png" width="500"/>
 
 * Perform SVM on PCA
-```
+```r
 pca.svm <- run_pca_svm(cleaned.data, point.shape = point.shape, class.color = NULL, pop.order = pop)
 # PC1 variance explained: 28.62%
 # PC2 variance explained: 14.04%
