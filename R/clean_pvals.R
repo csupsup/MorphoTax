@@ -29,7 +29,7 @@ clean_pvals <- function(tk.dir = "tk_path", dn.dir = "dn_path",
     stop("Error: Both 'tk.dir' and 'dn.dir' must be specified.")
   }
   
-  # Check if the directories exist
+  ## Check if the directories exist
   if (!dir.exists(tk.dir)) {
     stop(paste("Error: The directory", tk.dir, "does not exist."))
   }

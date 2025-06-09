@@ -4,14 +4,12 @@
 \alias{levene_sex}
 \title{Levene's Test by Sex}
 \usage{
-levene_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
+levene_sex(data, sex = "Sex", grp = "Pop")
 }
 \arguments{
 \item{data}{A data frame with population or species label and sex information in the first two columns, followed by morpholigcal data.}
 
 \item{sex}{String. Column name for sex information, specifying male and female.}
-
-\item{char}{String. Column name for morphological character to test.}
 
 \item{grp}{String. Column name for population or species.}
 }
@@ -24,6 +22,8 @@ A function to test homogeneity of variance in each sex within each population us
 \examples{
 data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
-levene.res <- levene_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
+levene.res <- levene_sex(data, sex = "Sex", grp = "Pop")
+
+levene.res
 
 }

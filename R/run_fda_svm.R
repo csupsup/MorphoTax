@@ -88,8 +88,8 @@ run_fda_svm <- function(data, point.shape = NULL, class.color = NULL, pop.order 
       x = "FDA Dimension 1",
       y = "FDA Dimension 2",
       color = "",
-      shape = "",
-      fill = ""
+      shape = "True Class",
+      fill = "Predicted Class"
     ) +
     theme_classic() +
     theme(legend.key = element_blank(),

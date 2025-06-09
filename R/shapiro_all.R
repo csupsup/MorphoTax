@@ -86,6 +86,8 @@ shapiro_all <- function(data, grp = "Pop") {
 
   ## Combine all results into a single data frame and return it
   shapiro.sum <- do.call(rbind, results)
+  rownames(shapiro.sum) <- NULL
+  
   return(shapiro.sum)
 }
 

@@ -10,7 +10,7 @@
 #' 
 #' filtered.data <- filter_sex(data) 
 #'
-#' head(filtered.data)
+#' filtered.data
 #'
 #' @return A data frame containing filtered data.
 #' @export

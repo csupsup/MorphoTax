@@ -4,16 +4,16 @@
 \alias{run_pca}
 \title{Principal Component Analysis}
 \usage{
-run_pca(data, prop.var = TRUE, var.load = TRUE, pts.load = TRUE)
+run_pca(data, prop.var = TRUE, var.load = TRUE, pc.scores = TRUE)
 }
 \arguments{
 \item{data}{A data frame with population or species label in the first column, followed by morpholigcal data.}
 
 \item{prop.var}{Logical (TRUE or FALSE). If TRUE, it calculates the varaince explained by the first two components.}
 
-\item{var.load}{Logical (TRUE or FALSE). If TRUE, it extracts and writes the varaible loadings to csv files.}
+\item{var.load}{Logical (TRUE or FALSE). If TRUE, it extracts and writes the varaible loadings to a csv file.}
 
-\item{pts.load}{Logical (TRUE or FALSE). If TRUE, it extracts and writes the point loadings to csv files .}
+\item{pc.scores}{Logical (TRUE or FALSE). If TRUE, it extracts and writes the PC scores to a csv file.}
 }
 \value{
 A list containing the FDA results.
@@ -27,7 +27,7 @@ the variance explained of the first two components, extracts the variable and po
 data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
-pca.res <- run_pca(data, prop.var = TRUE, var.load = TRUE, pts.load = TRUE)
+pca.res <- run_pca(data, prop.var = TRUE, var.load = TRUE, pc.scores = TRUE)
 
 pca.res
 

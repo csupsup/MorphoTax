@@ -37,12 +37,19 @@ anova_tukey <- function(data, grp = "Pop", write.tk = FALSE, dir = NULL) {
   
   ## Create empty lists to store results
   aov.summary <- list()
-  tukey.combined <- list()
   tukey.summary <- list()
 
+  ## Get names of all morphometric columns (excluding grouping variable)
+  morph_names <- setdiff(colnames(data), grp)
+
+  ## Prepare containers for all comparisons and p-values
+  all_comparisons <- character()
+  tukey_pvals <- list()
+
   ## Loop through each column
-  for (i in 2:ncol(data)) {
-    col <- data[, i]
+  for (i in seq_along(morph_names)) {
+    morph <- morph_names[i]
+    col <- data[[morph]]
     
     ## Perform ANOVA
     aov.result <- aov(col ~ data[[grp]], data = data)
@@ -54,23 +61,29 @@ anova_tukey <- function(data, grp = "Pop", write.tk = FALSE, dir = NULL) {
     p.value <- aov.sum$`Pr(>F)`[1]
     
     ## Add results to aov.summary
-    aov.summary[[i - 1]] <- c(colnames(data)[i], df, F.value, p.value)
+    aov.summary[[i]] <- c(morph, df, F.value, p.value)
     
     ## Perform Tukey HSD test if the p-value is significant
-    if (p.value < 0.05) {
+    if (!is.na(p.value) && p.value < 0.05) {
       tukey.result <- TukeyHSD(aov.result)
-      tukey.combined[[i - 1]] <- tukey.result
-      
-      ## Format Tukey results into a data frame
       tukey.df <- as.data.frame(tukey.result[[1]])
-      tukey.df$Comparison <- rownames(tukey.df)
+      comparisons <- rownames(tukey.df)
+      pvals <- tukey.df$`p adj`
+
+      ## Store comparison names and p-values
+      all_comparisons <- unique(c(all_comparisons, comparisons))
+      tukey_pvals[[morph]] <- setNames(pvals, comparisons)
+
+      ## Add Comparison and Morph columns for export
+      tukey.df$Comparison <- comparisons
+      tukey.df$Morph <- morph
       
-      tukey.summary[[i - 1]] <- tukey.df
+      ## Add to summary list
+      tukey.summary[[length(tukey.summary) + 1]] <- tukey.df
       
       ## Write Tukey result to a CSV file if write.tk is TRUE
       if (write.tk) {
-        col_name <- colnames(data)[i]
-        file_name <- paste0(dir, "tk_", col_name, "_results.csv")
+        file_name <- paste0(dir, "tk_", morph, "_results.csv")
         
         ## Ensure the directory exists
         dir.create(dirname(file_name), showWarnings = FALSE, recursive = TRUE)
@@ -82,15 +95,35 @@ anova_tukey <- function(data, grp = "Pop", write.tk = FALSE, dir = NULL) {
   }
 
   ## Convert ANOVA summary to a data frame
-  aov.sum.df <- as.data.frame(do.call(rbind, aov.summary))
-  
-  ## Set column names for the ANOVA summary
+  aov.sum.df <- as.data.frame(do.call(rbind, aov.summary), stringsAsFactors = FALSE)
   colnames(aov.sum.df) <- c("Morph", "DF", "F.value", "p.value")
-  
+  aov.sum.df$DF <- as.numeric(aov.sum.df$DF)
+  aov.sum.df$F.value <- as.numeric(aov.sum.df$F.value)
+  aov.sum.df$p.value <- as.numeric(aov.sum.df$p.value)
+
+  ## Create wide-format matrix: rows = comparisons, columns = morphs, values = p adj
+  all_comparisons <- sort(unique(all_comparisons))
+  padj_matrix <- matrix(NA, nrow = length(all_comparisons), ncol = length(morph_names))
+  colnames(padj_matrix) <- morph_names
+  rownames(padj_matrix) <- all_comparisons
+
+  ## Fill in the matrix
+  for (morph in names(tukey_pvals)) {
+    morph_pvals <- tukey_pvals[[morph]]
+    for (comp in names(morph_pvals)) {
+      padj_matrix[comp, morph] <- morph_pvals[comp]
+    }
+  }
+
+  ## Convert to data frame with Comparison as first column
+  padj_matrix_df <- as.data.frame(padj_matrix)
+  padj_matrix_df <- cbind(Comparison = rownames(padj_matrix_df), padj_matrix_df)
+  rownames(padj_matrix_df) <- NULL
+
   ## Return the list of results
   return(list(
     aov_summary = aov.sum.df,
-    tukey_combined = tukey.combined,
-    tukey_summary = tukey.summary
+    tukey_summary = tukey.summary,
+    tukey_padj_matrix = padj_matrix_df
   ))
 }

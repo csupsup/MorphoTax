@@ -40,32 +40,45 @@ kw_dunn <- function(data, grp = "Pop", write.dunn = TRUE, dir = "dn_female/dn_")
 
   ## Create empty lists to store results
   kruskal.summary <- list()
-  dunn.combined <- list()
   dunn.summary <- list()
 
-  ## Loop through each column, except the first one.
-  for (i in 2:ncol(data)) {
-    col <- data[, i]
+  ## Prepare containers for comparison names and p-values
+  morph_names <- setdiff(colnames(data), grp)
+  all_comparisons <- character()
+  dunn_pvals <- list()
+
+  ## Loop through each column
+  for (i in seq_along(morph_names)) {
+    morph <- morph_names[i]
+    col <- data[[morph]]
     
     ## Perform Kruskal-Wallis test
     kruskal.result <- kruskal.test(col ~ data[[grp]], data = data)
     kruskal.p.value <- kruskal.result$p.value
     
     ## Store Kruskal-Wallis results
-    kruskal.summary[[i - 1]] <- c(colnames(data)[i], kruskal.result$statistic, kruskal.p.value)
+    kruskal.summary[[i]] <- c(morph, kruskal.result$statistic, kruskal.p.value)
     
     ## Perform Dunn's Test if Kruskal-Wallis p-value is significant
-    if (kruskal.p.value < 0.05) {
+    if (!is.na(kruskal.p.value) && kruskal.p.value < 0.05) {
       dunn.result <- dunnTest(col ~ data[[grp]], data = data, method = "bonferroni")
-      dunn.combined[[i - 1]] <- dunn.result
-      
       dunn.df <- as.data.frame(dunn.result$res)
-      dunn.summary[[i - 1]] <- dunn.df
       
+      ## Extract comparison names and p-values
+      comparisons <- dunn.df$Comparison
+      pvals <- dunn.df$P.adj
+      
+      ## Store in lookup list for padj matrix
+      all_comparisons <- unique(c(all_comparisons, comparisons))
+      dunn_pvals[[morph]] <- setNames(pvals, comparisons)
+      
+      ## Add Morph column for record keeping
+      dunn.df$Morph <- morph
+      dunn.summary[[length(dunn.summary) + 1]] <- dunn.df
+
       ## Write Dunn's result to a csv file if write.dunn is TRUE
       if (write.dunn) {
-        col.name <- colnames(data)[i]
-        file.name <- paste0(dir, "dn_", col.name, "_results.csv")
+        file.name <- paste0(dir, "dn_", morph, "_results.csv")
         
         ## Ensure the directory exists
         dir.create(dirname(file.name), showWarnings = FALSE, recursive = TRUE)
@@ -77,15 +90,33 @@ kw_dunn <- function(data, grp = "Pop", write.dunn = TRUE, dir = "dn_female/dn_")
   }
 
   ## Convert Kruskal-Wallis summary to a data frame
-  kruskal.sum <- as.data.frame(do.call(rbind, kruskal.summary))
-  
-  ## Add column names to the Kruskal-Wallis result
+  kruskal.sum <- as.data.frame(do.call(rbind, kruskal.summary), stringsAsFactors = FALSE)
   colnames(kruskal.sum) <- c("Morph", "KW Statistic", "p.value")
-  
+  kruskal.sum$`KW Statistic` <- as.numeric(kruskal.sum$`KW Statistic`)
+  kruskal.sum$p.value <- as.numeric(kruskal.sum$p.value)
+
+  ## Create p.adj matrix: rows = comparisons, columns = morphs
+  all_comparisons <- sort(unique(all_comparisons))
+  padj_matrix <- matrix(NA, nrow = length(all_comparisons), ncol = length(morph_names))
+  colnames(padj_matrix) <- morph_names
+  rownames(padj_matrix) <- all_comparisons
+
+  for (morph in names(dunn_pvals)) {
+    morph_pvals <- dunn_pvals[[morph]]
+    for (comp in names(morph_pvals)) {
+      padj_matrix[comp, morph] <- morph_pvals[comp]
+    }
+  }
+
+  ## Convert to data frame with Comparison column
+  padj_matrix_df <- as.data.frame(padj_matrix)
+  padj_matrix_df <- cbind(Comparison = rownames(padj_matrix_df), padj_matrix_df)
+  rownames(padj_matrix_df) <- NULL
+
   ## Return the list of results
   return(list(
     kruskal_summary = kruskal.sum,
-    dunn_combined = dunn.combined,
-    dunn_summary = dunn.summary
+    dunn_summary = dunn.summary,
+    dunn_padj_matrix = padj_matrix_df
   ))
 }

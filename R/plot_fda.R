@@ -36,7 +36,7 @@ plot_fda <- function(data, fixed.shape = NULL, point.color = NULL, split = NULL,
   if (!is.data.frame(data)) stop("The input data must be a data frame")
   if (!"Pop" %in% names(data)) stop("The data must contain a 'Pop' column")
 
-  # Data split  
+  ## Data split  
   if (is.null(split)) {
     train_data <- data
     test_data <- data
@@ -55,10 +55,10 @@ plot_fda <- function(data, fixed.shape = NULL, point.color = NULL, split = NULL,
   ## Get FDA axes (project both train and test data)
   fda.axes <- predict(fda.res, newdata = test_data, type = "var")
   
-  # Convert fda.axes to a data frame
+  ## Convert fda.axes to a data frame
   fda.axes2 <- as.data.frame(fda.axes)
   
-  # Check the structure of fda.axes2
+  ## Check the structure of fda.axes2
   if (ncol(fda.axes2) >= 2) {
     colnames(fda.axes2)[1:2] <- c("V1", "V2")
   } else {

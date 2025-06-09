@@ -9,7 +9,7 @@
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
-#' sum.res <- esult <- summarize_morph(data, grp = "Pop")
+#' sum.res <- summarize_morph(data, grp = "Pop")
 #'
 #' head(sum.res)
 #'

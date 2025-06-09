@@ -1,25 +1,25 @@
-#' @title T-test by Sex
+#' @title Wilcoxon Test by Sex
 #'
-#' @description A function to test differences in characters between sexes within each population using independent T-test.
+#' @description A function to test differences in characters between sexes within each population using Wilcoxon Test.
 #' 
 #' @param data A data frame with population or species label and sex information in the first two columns, followed by morpholigcal data.
 #' @param sex String. Column name for sex information, specifying male and female.
 #' @param char String. Column name for morphological character to test.
 #' @param grp String. Column name for population or species.
-#' @param all Logical. If TRUE, T-test will be performed to all character or numeric columns.
+#' @param all Logical. If TRUE, the Wilcoxon Test will be performed to all character or numeric columns.
 #'
 #' @examples
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #'
-#' t.test.res <- t_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE)
+#' wilcox.res <- wilcox_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE)
 #'
-#' head(t.test.res)
+#' head(wilcox.res)
 #'
-#' @importFrom stats t.test
-#' @return A data frame containing the results of T-test.
+#' @importFrom stats wilcox.test
+#' @return A data frame containing the results of Wilcoxon test.
 #' @export
 
-t_test_sex <- function(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE) {
+wilcox_test_sex <- function(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE) {
   ## Check if the specified columns exist in the data frame
   if (!(sex %in% colnames(data))) {
     stop(paste("Error: Column", sex, "not found in the data frame."))
@@ -47,17 +47,15 @@ t_test_sex <- function(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE
 
   ## Loop through each character column
   for (char.col in char.cols) {
-    t.test.sum <- data.frame(
+    test.sum <- data.frame(
       Char = character(),
       Pop = character(),
-      T.stat = numeric(),
-      F.value = numeric(),
+      W.stat = numeric(),
       p.value = numeric(),
       significance = character(),
       stringsAsFactors = FALSE
     )
 
-    ## Iterate through each unique population
     for (pop in unique(data[[grp]])) {
       pop.data <- subset(data, data[[grp]] == pop)
 
@@ -67,24 +65,18 @@ t_test_sex <- function(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE
         next
       }
 
-      t.test.res <- t.test(as.formula(paste(char.col, "~", sex)), data = pop.data)
+      test.res <- wilcox.test(as.formula(paste(char.col, "~", sex)), data = pop.data, exact = FALSE)
 
-      t.stat <- t.test.res$statistic[1]
-      f.val <- t.test.res$parameter[1]
-      p.val <- t.test.res$p.value
-      significance <- ifelse(p.val < 0.05, "*", "")
-
-      t.test.sum <- rbind(t.test.sum, data.frame(
+      test.sum <- rbind(test.sum, data.frame(
         Char = char.col,
         Pop = pop,
-        T.stat = t.stat,
-        F.value = f.val,
-        p.value = p.val,
-        significance = significance
+        W.stat = test.res$statistic,
+        p.value = test.res$p.value,
+        significance = ifelse(test.res$p.value < 0.05, "*", "")
       ))
     }
 
-    result.list[[char.col]] <- t.test.sum
+    result.list[[char.col]] <- test.sum
   }
 
   ## Combine results into a single data frame

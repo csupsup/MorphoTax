@@ -4,7 +4,7 @@
 \alias{t_test_sex}
 \title{T-test by Sex}
 \usage{
-t_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
+t_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE)
 }
 \arguments{
 \item{data}{A data frame with population or species label and sex information in the first two columns, followed by morpholigcal data.}
@@ -14,17 +14,19 @@ t_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
 \item{char}{String. Column name for morphological character to test.}
 
 \item{grp}{String. Column name for population or species.}
+
+\item{all}{Logical. If TRUE, T-test will be performed to all character or numeric columns.}
 }
 \value{
 A data frame containing the results of T-test.
 }
 \description{
-A function to test differences in characters between sexes with each population using independent T-test.
+A function to test differences in characters between sexes within each population using independent T-test.
 }
 \examples{
 data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
-t.test.res <- t_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop")
+t.test.res <- t_test_sex(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE)
 
 head(t.test.res)
 

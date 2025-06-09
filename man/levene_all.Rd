@@ -22,4 +22,6 @@ data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 levene.res <- levene_all(data, grp = "Pop")
 
+levene.res
+
 }

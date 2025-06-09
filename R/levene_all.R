@@ -9,6 +9,8 @@
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #'
 #' levene.res <- levene_all(data, grp = "Pop")
+#' 
+#' levene.res
 #'
 #' @importFrom car leveneTest
 #' @return A data frame summarizing the results of Levene's test.
@@ -57,5 +59,7 @@ levene_all <- function(data, grp = "Pop") {
   }
 
   ## Return the summary data frame
+  rownames(levene.sum) <- NULL
+  
   return(levene.sum)
 }

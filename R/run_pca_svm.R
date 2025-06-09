@@ -58,41 +58,41 @@ run_pca_svm <- function(data, point.shape = NULL, class.color = NULL, pop.order 
     pca.axes$Pop <- factor(pca.axes$Pop, levels = pop.order)
   }
 
-  # Set up 10-fold cross-validation
+  ## Set up 10-fold cross-validation
   ctrl <- trainControl(method = "cv", number = 10, classProbs = FALSE)
 
-  # Train SVM model using caret (linear kernel)
+  ## Train SVM model using caret (linear kernel)
   svm_model <- train(Pop ~ ., data = pca.axes, method = "svmLinear", trControl = ctrl)
 
-  # Print overall CV results
+  ## Print overall CV results
   print(svm_model)
 
-  # Use final model to predict and evaluate on full data
+  ## Use final model to predict and evaluate on full data
   predictions <- predict(svm_model, newdata = pca.axes)
   cm <- confusionMatrix(predictions, pca.axes$Pop)
   print(cm)
 
-  # Plotting setup
+  ## Set up plot
   x_range <- seq(min(pca.axes$PC1), max(pca.axes$PC1), length.out = 100)
   y_range <- seq(min(pca.axes$PC2), max(pca.axes$PC2), length.out = 100)
   grid <- expand.grid(PC1 = x_range, PC2 = y_range)
 
-  # Predict over the PCA grid
+  ## Predict over the PCA grid
   grid$Predicted <- predict(svm_model, newdata = grid)
 
-  # Default point shapes
+  ## Default point shapes
   if (is.null(point.shape)) {
     levels_pop <- levels(factor(pca.axes$Pop))
     point.shape <- setNames(1:length(levels_pop), levels_pop)
   }
 
-  # Default class color
+  ## Default class color
   if (is.null(class.color)) {
     num.pops <- length(unique(grid$Predicted))
     class.color <- colorRampPalette(brewer.pal(9, "PuBu"))(num.pops)
   }
 
-  # Plot decision boundaries
+  ## Plot decision boundaries
   plotobj <- ggplot() +
     geom_tile(data = grid, aes(x = PC1, y = PC2, fill = Predicted), alpha = 0.5) +
     geom_point(data = pca.axes, aes(x = PC1, y = PC2, shape = Pop, color = Pop), size = 3, color = "black") +
@@ -103,8 +103,8 @@ run_pca_svm <- function(data, point.shape = NULL, class.color = NULL, pop.order 
       x = "PCA Component 1",
       y = "PCA Component 2",
       color = "",
-      shape = "",
-      fill = ""
+      shape = "True Class",
+      fill = "Predicted Class"
     ) +
     theme_classic() +
     theme(legend.key = element_blank(),

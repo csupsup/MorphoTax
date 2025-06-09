@@ -21,6 +21,6 @@ data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 
 filtered.data <- filter_sex(data) 
 
-head(filtered.data)
+filtered.data
 
 }

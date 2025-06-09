@@ -17,24 +17,24 @@
 
 combine_pvals <- function(dir) {
 
-  # Helper function to standardize comparisons
+  ## Function to standardize comparisons
   standardize <- function(x) {
     x <- gsub("[-]", " - ", x)
     parts <- strsplit(x, " - ")
     sapply(parts, function(pair) paste(sort(trimws(pair)), collapse = " - "))
   }
   
-  # Get list of CSV files in the directory
+  ## Get list of CSV files in the directory
   files <- list.files(dir, pattern = "\\.csv$", full.names = TRUE)
   
-  # Initialize empty list to store data frames
+  ## Initialize empty list to store data frames
   data_list <- list()
   
-  # Read and standardize each file
+  ## Read and standardize each file
   for (file in files) {
     data <- read.csv(file, stringsAsFactors = FALSE)
     
-    # Identify which column has comparisons and which has p-values
+    ## Identify which column has comparisons and which has p-values
     comp_col <- grep("Comparison", names(data), ignore.case = TRUE, value = TRUE)
     pval_col <- grep("p.value|pval|p_value|P.adj|p adj", names(data), ignore.case = TRUE, value = TRUE)
     
@@ -43,18 +43,18 @@ combine_pvals <- function(dir) {
       next
     }
     
-    # Standardize and rename columns
+    ## Standardize and rename columns
     data$Normalized_Comparison <- standardize(data[[comp_col]])
     data <- data[, c("Normalized_Comparison", pval_col)]
     
-    # Rename p-value column using file name (without extension)
+    ## Rename p-value column using file name (without extension)
     pval_name <- file_path_sans_ext(basename(file))
     names(data)[2] <- paste0("pvalue_", pval_name)
     
     data_list[[length(data_list) + 1]] <- data
   }
   
-  # Combine all data frames using full joins
+  ## Combine all data frames using full joins
   combined_data <- Reduce(function(x, y) full_join(x, y, by = "Normalized_Comparison"), data_list)
   
   return(combined_data)

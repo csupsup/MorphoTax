@@ -6,14 +6,14 @@
 #'
 #' @param data A data frame with population or species label in the first column, followed by morpholigcal data.
 #' @param prop.var Logical (TRUE or FALSE). If TRUE, it calculates the varaince explained by the first two components.
-#' @param var.load Logical (TRUE or FALSE). If TRUE, it extracts and writes the varaible loadings to csv files.
-#' @param pts.load Logical (TRUE or FALSE). If TRUE, it extracts and writes the point loadings to csv files .
+#' @param var.load Logical (TRUE or FALSE). If TRUE, it extracts and writes the varaible loadings to a csv file.
+#' @param pc.scores Logical (TRUE or FALSE). If TRUE, it extracts and writes the PC scores to a csv file.
 #'
 #' @examples
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #' 
-#' pca.res <- run_pca(data, prop.var = TRUE, var.load = TRUE, pts.load = TRUE)
+#' pca.res <- run_pca(data, prop.var = TRUE, var.load = TRUE, pc.scores = TRUE)
 #' 
 #' pca.res
 #'
@@ -24,7 +24,7 @@
 #' @return A list containing the FDA results.
 #' @export
 
-run_pca <- function(data, prop.var = TRUE, var.load = TRUE, pts.load = TRUE) {
+run_pca <- function(data, prop.var = TRUE, var.load = TRUE, pc.scores = TRUE) {
   
   ## Perform PCA
   pca.res <- prcomp(data[2:ncol(data)], center = TRUE, scale. = TRUE)
@@ -50,16 +50,16 @@ run_pca <- function(data, prop.var = TRUE, var.load = TRUE, pts.load = TRUE) {
     cat(paste0("Variable loadings written to:", varload_filename), "%\n")
   }
   
-  ## Extract point loadings if requested
-  pca.pts.load <- NULL
-  if (pts.load) {
-    pca.pts.load <- as_tibble(pca.res$x) %>% 
+  ## Extract principal component scores if requested
+  pca.pc.scores <- NULL
+  if (pc.scores) {
+    pca.pc.scores <- as_tibble(pca.res$x) %>% 
       bind_cols(data$Pop) %>%
       rename(Pop = ncol(.))
-    ptsload_filename <- paste0("pca_ptsload_", deparse(substitute(data)), ".csv")
-    write.csv(pca.pts.load, ptsload_filename)
+    pcscores_filename <- paste0("pca_pcscores_", deparse(substitute(data)), ".csv")
+    write.csv(pca.pc.scores, pcscores_filename)
     # Print only the file write message
-    cat(paste0("Point loadings written to:", ptsload_filename), "%\n")
+    cat(paste0("Principal component scores written to:", pcscores_filename), "%\n")
   }
   
   ## Return key results
@@ -67,9 +67,10 @@ run_pca <- function(data, prop.var = TRUE, var.load = TRUE, pts.load = TRUE) {
     ax1.var = ax1.var,
     ax2.var = ax2.var,
     pca.var.load = pca.var.load,
-    pca.pts.load = pca.pts.load
+    pca.pc.scores = pca.pc.scores
   ))
 }
+
 
 ## Declare
 utils::globalVariables(".")
