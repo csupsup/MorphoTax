@@ -60,7 +60,7 @@ summarize_morph <- function(data, grp = NULL) {
       
       stats <- list(
         pop = group_name,
-        variable = var,
+        char = var,
         n = n_samples,
         min = min_val,
         median = median_val,

@@ -52,9 +52,9 @@ shapiro_sex <- function(data, sex = "Sex", grp = "Pop") {
         
         ## Store the results
         results[[length(results) + 1]] <- data.frame(
-          Pop = pop,
-          Sex = sex_value,
-          Char = var,
+          pop = pop,
+          sex = sex_value,
+          char = var,
           shapiro.stat = shapiro.res$statistic,
           shapiro.pvalue = shapiro.res$p.value,
           significance = significance

@@ -91,7 +91,7 @@ kw_dunn <- function(data, grp = "Pop", write.dunn = TRUE, dir = "dn_female/dn_")
 
   ## Convert Kruskal-Wallis summary to a data frame
   kruskal.sum <- as.data.frame(do.call(rbind, kruskal.summary), stringsAsFactors = FALSE)
-  colnames(kruskal.sum) <- c("Morph", "KW Statistic", "p.value")
+  colnames(kruskal.sum) <- c("char", "KW Statistic", "p.value")
   kruskal.sum$`KW Statistic` <- as.numeric(kruskal.sum$`KW Statistic`)
   kruskal.sum$p.value <- as.numeric(kruskal.sum$p.value)
 

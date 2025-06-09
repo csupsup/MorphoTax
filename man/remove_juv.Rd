@@ -4,7 +4,7 @@
 \alias{remove_juv}
 \title{Remove Juveniles}
 \usage{
-remove_juv(data, char = "SVL", threshold = 70, sum = TRUE)
+remove_juv(data, char = "SVL", threshold = 0, sum = TRUE)
 }
 \arguments{
 \item{data}{A data frame with population or species label in the first column, followed by morpholigcal data.}

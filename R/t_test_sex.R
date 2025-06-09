@@ -75,8 +75,8 @@ t_test_sex <- function(data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE
       significance <- ifelse(p.val < 0.05, "*", "")
 
       t.test.sum <- rbind(t.test.sum, data.frame(
-        Char = char.col,
-        Pop = pop,
+        char = char.col,
+        pop = pop,
         T.stat = t.stat,
         F.value = f.val,
         p.value = p.val,

@@ -96,7 +96,7 @@ anova_tukey <- function(data, grp = "Pop", write.tk = FALSE, dir = NULL) {
 
   ## Convert ANOVA summary to a data frame
   aov.sum.df <- as.data.frame(do.call(rbind, aov.summary), stringsAsFactors = FALSE)
-  colnames(aov.sum.df) <- c("Morph", "DF", "F.value", "p.value")
+  colnames(aov.sum.df) <- c("char", "DF", "F.value", "p.value")
   aov.sum.df$DF <- as.numeric(aov.sum.df$DF)
   aov.sum.df$F.value <- as.numeric(aov.sum.df$F.value)
   aov.sum.df$p.value <- as.numeric(aov.sum.df$p.value)

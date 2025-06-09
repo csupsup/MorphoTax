@@ -17,7 +17,7 @@
 #' @return A filtered data frame.
 #' @export
 
-remove_juv <- function(data, char = "SVL", threshold = 70, sum = TRUE) {
+remove_juv <- function(data, char = "SVL", threshold = 0, sum = TRUE) {
   ## Access specified column
   col_values <- data[[char]]
   

@@ -36,16 +36,16 @@ shapiro_all <- function(data, grp = "Pop") {
           p.value <- shapiro.res$p.value  
           significance <- ifelse(p.value < 0.05, "*", "")  
           results[[length(results) + 1]] <- data.frame( 
-            Pop = "All",  # No grouping, use "All"
-            Morph = char,
+            pop = "All",  # No grouping, use "All"
+            char = char,
             shapiro.stat = shapiro.res$statistic,
             shapiro.pvalue = p.value,
             significance = significance
           )
         } else {
           results[[length(results) + 1]] <- data.frame(
-            Pop = "All",  
-            Morph = char,
+            pop = "All",  
+            char = char,
             shapiro.stat = NA,
             shapiro.pvalue = NA,
             significance = NA
@@ -64,16 +64,16 @@ shapiro_all <- function(data, grp = "Pop") {
             p.value <- shapiro.res$p.value  
             significance <- ifelse(p.value < 0.05, "*", "")  
             results[[length(results) + 1]] <- data.frame( 
-              Pop = pop,
-              Morph = char,
+              pop = pop,
+              char = char,
               shapiro.stat = shapiro.res$statistic,
               shapiro.pvalue = p.value,
               significance = significance
             )
           } else {
             results[[length(results) + 1]] <- data.frame(  
-              Pop = pop,
-              Morph = char,
+              pop = pop,
+              char = char,
               shapiro.stat = NA,
               shapiro.pvalue = NA,
               significance = NA

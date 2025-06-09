@@ -43,7 +43,7 @@ run_pca <- function(data, prop.var = TRUE, var.load = TRUE, pc.scores = TRUE) {
   ## Extract variable loadings if requested
   pca.var.load <- NULL
   if (var.load) {
-    pca.var.load <- as_tibble(pca.res$rotation, rownames = 'variable')
+    pca.var.load <- as_tibble(pca.res$rotation, rownames = 'char')
     varload_filename <- paste0("pca_varload_", deparse(substitute(data)), ".csv")
     write.csv(pca.var.load, varload_filename)
     # Print only the file write message

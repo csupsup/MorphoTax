@@ -129,19 +129,19 @@ When obtaining summary statistics, it is entirely your choice whether to use the
 sum.res <- summarize_morph(cleaned.data, grp = "Pop")
 
 head(sum.res)
-#     pop variable  n    min median    max         mean_sd     iqr_range
-# 1 Luzon      SVL 93 1.9041 2.0180 2.0923 2.0064 ± 0.0441 1.9797–2.0359
-# 2 Luzon       TD 93 0.3091 0.4410 0.5716 0.4459 ± 0.0507 0.4063–0.4792
-# 3 Luzon       OD 93 0.7971 0.8931 0.9630 0.8941 ± 0.0276 0.8756–0.9116
-# 4 Luzon       HW 93 1.0578 1.1201 1.2236 1.1218 ± 0.0298 1.1047–1.1386
-# 5 Luzon       HD 93 1.0097 1.0641 1.1439 1.0671 ± 0.0268 1.0473–1.0823
-# 6 Luzon       HL 93 1.3576 1.3970 1.5169 1.4006 ± 0.0243 1.3854–1.4127
+#     pop char  n    min median    max         mean_sd     iqr_range
+# 1 Luzon  SVL 93 1.9041 2.0180 2.0923 2.0064 ± 0.0441 1.9797–2.0359
+# 2 Luzon   TD 93 0.3091 0.4410 0.5716 0.4459 ± 0.0507 0.4063–0.4792
+# 3 Luzon   OD 93 0.7971 0.8931 0.9630 0.8941 ± 0.0276 0.8756–0.9116
+# 4 Luzon   HW 93 1.0578 1.1201 1.2236 1.1218 ± 0.0298 1.1047–1.1386
+# 5 Luzon   HD 93 1.0097 1.0641 1.1439 1.0671 ± 0.0268 1.0473–1.0823
+# 6 Luzon   HL 93 1.3576 1.3970 1.5169 1.4006 ± 0.0243 1.3854–1.4127
 
 ## Compute and summarize ratios. Ensure that you assign the numerator (char.as.num) and the denominator (char.as.den). Let us use TD (tympanum diameter) and SVL.
 ratio.sum <- summarize_ratio(cleaned.data, char.as.num = "TD", char.as.den = "SVL", grp = "Pop")
 
 head(ratio.sum)
-#        Pop  N LongCount ShortCount LongPct ShortPct LongRange   ShortRange
+#        pop  n longCount shortCount longPct shortPct longRange   shortRange
 # 1    Luzon 93         0         93       0      100        NA 0.28 to 0.16
 # 2 Mindanao 71         0         71       0      100        NA 0.35 to 0.22
 # 3  Palawan 37         0         37       0      100        NA 0.28 to 0.21
@@ -149,7 +149,7 @@ head(ratio.sum)
 # 1           NaN          NA      0.2223590   0.02571428
 # 2           NaN          NA      0.2753895   0.02490564
 # 3           NaN          NA      0.2467993   0.01662235
-                         ShortRdiff LongRdiff
+#                          shortRdiff longRdiff
 # 1 TD is 72% to 84% shorter than SVL        NA
 # 2 TD is 65% to 78% shorter than SVL        NA
 # 3 TD is 72% to 79% shorter than SVL        NA
@@ -162,7 +162,7 @@ As mentioned above, functions are provided to perform these tests when sex data 
 sex.cleaned.data <- cbind(cleaned.data, filtered.data$Sex) # Sex is added to the last column
 colnames(sex.cleaned.data)[ncol(sex.cleaned.data)] <- "Sex" # Rename the sex column
 
-# head(sex.cleaned.data)
+head(sex.cleaned.data)
 #     Pop      SVL        TD        OD       HW       HD       HL      HdL
 # 1 Luzon 1.904120 0.4069708 0.8876584 1.154723 1.092703 1.418329 1.294251
 # 2 Luzon 1.920123 0.4055793 0.8944359 1.137052 1.069833 1.396954 1.233998
@@ -182,7 +182,7 @@ colnames(sex.cleaned.data)[ncol(sex.cleaned.data)] <- "Sex" # Rename the sex col
 shapiro.res <- shapiro_sex(sex.cleaned.data, sex = "Sex", grp = "Pop")
 
 head(shapiro.res)
-#     Pop Sex Char shapiro.stat shapiro.pvalue significance
+#     pop sex char shapiro.stat shapiro.pvalue significance
 # 1 Luzon   f  SVL    0.9488428   1.610459e-02            *
 # 2 Luzon   f   TD    0.9542124   2.850380e-02            *
 # 3 Luzon   f   OD    0.9589719   4.774296e-02            *
@@ -194,37 +194,37 @@ head(shapiro.res)
 shapiro.res <- shapiro_all(cleaned.data, grp = "Pop") # Use "cleaned.data" here
 
 head(shapiro.res)
-#     Pop Morph shapiro.stat shapiro.pvalue significance
-# 1 Luzon   SVL    0.9656510   1.501378e-02            *
-# 2 Luzon    TD    0.9811216   1.984421e-01             
-# 3 Luzon    OD    0.9702799   3.216383e-02            *
-# 4 Luzon    HW    0.9671068   1.903779e-02            *
-# 5 Luzon    HD    0.9701183   3.130964e-02            *
-# 6 Luzon    HL    0.8725513   2.023374e-07            *
+#     pop char shapiro.stat shapiro.pvalue significance
+# 1 Luzon  SVL    0.9656510   1.501378e-02            *
+# 2 Luzon   TD    0.9811216   1.984421e-01             
+# 3 Luzon   OD    0.9702799   3.216383e-02            *
+# 4 Luzon   HW    0.9671068   1.903779e-02            *
+# 5 Luzon   HD    0.9701183   3.130964e-02            *
+# 6 Luzon   HL    0.8725513   2.023374e-07            *
 
 ## Perform Levene's test by sex
 levene.res <- levene_sex(sex.cleaned.data, sex = "Sex", grp = "Pop")
 
 head(levene.res)
-#     Pop Char     F.value    p.value significance
+#     pop char     F.value    p.value significance
 # 1 Luzon  SVL 1.908969615 0.17046051             
 # 2 Luzon   TD 0.002634629 0.95917615             
 # 3 Luzon   OD 3.642243429 0.05948311             
 # 4 Luzon   HW 4.780579668 0.03134770            *
 # 5 Luzon   HD 3.844761020 0.05295954             
-# 6 Luzon   HL 1.754550535 0.18862262  
+# 6 Luzon   HL 1.754550535 0.18862262     
 
 ## Perform Levene's test without sex data 
 levene.res <- levene_all(cleaned.data, grp = "Pop")
 
 head(levene.res)
-#   Morph  F.value     p.value significance
-# 1   SVL 3.738594 0.025483320            *
-# 2    TD 4.762689 0.009545608            *
-# 3    OD 3.970034 0.020394336            *
-# 4    HW 4.511511 0.012134115            *
-# 5    HD 3.420796 0.034630433            *
-# 6    HL 2.998711 0.052120732          
+#   char  F.value     p.value significance
+# 1  SVL 3.738594 0.025483320            *
+# 2   TD 4.762689 0.009545608            *
+# 3   OD 3.970034 0.020394336            *
+# 4   HW 4.511511 0.012134115            *
+# 5   HD 3.420796 0.034630433            *
+# 6   HL 2.998711 0.052120732             
 ```
 
 ### 5. Test for sexual dimorphism
@@ -263,7 +263,7 @@ sex.cleaned.data <- filter_sex(sex.cleaned.data)
 t.test.res <- t_test_sex(sex.cleaned.data, sex = "Sex", char = "SVL", grp = "Pop", all = FALSE)
 
 head(t.test.res)
-#   Char      Pop    T.stat   F.value      p.value significance
+#   char      pop    T.stat   F.value      p.value significance
 # 1  SVL    Luzon -4.926788 81.424399 4.320715e-06            *
 # 2  SVL Mindanao -3.421488 44.386686 1.347883e-03            *
 # 3  SVL  Palawan -2.282502  9.813006 4.606485e-02            *
@@ -283,7 +283,7 @@ ggsave("svl_errorbar.png", plot = svl.bar, width = 5, height = 5, dpi = 300)
 t.test.res <- t_test_sex(sex.cleaned.data, sex = "Sex", grp = "Pop", all = TRUE) # Set TRUE here
 
 head(t.test.res)
-#   Char      Pop     T.stat   F.value      p.value significance
+#   char      pop     T.stat   F.value      p.value significance
 # 1  SVL    Luzon -4.9267883 81.424399 4.320715e-06            *
 # 2  SVL Mindanao -3.4214875 44.386686 1.347883e-03            *
 # 3  SVL  Palawan -2.2825017  9.813006 4.606485e-02            *
@@ -297,7 +297,7 @@ For the Wilcoxon test, simply replace the function "t_test_sex" with "wilcox_tes
 Before doing any univariate analysis, make sure each morphological character meets the necessary conditions for the test (e.g., equal variance for ANOVA). See the tutorial for details on the tests for normality and homogeneity of variance mentioned above.
 ```r
 ## Identify which characters have unequal variances according to Levene's test
-sig.morphs.f <- levene.res[levene.res$significance == "*", "Morph"]
+sig.morphs.f <- levene.res[levene.res$significance == "*", "char"]
 
 ## These characters do not fulfill the assumptions of ANOVA; therefore, they should be tested with non-parametric Kruskal-Wallis test.
 
@@ -323,19 +323,19 @@ aov.res <- anova_tukey(df.eqvar, grp = "Pop", write.tk = TRUE, dir = "tk_morph/"
 
 ## Access ANOVA results
 aov.res$aov_summary
-#    Morph DF          F.value              p.value
-# 1     HL  2 47.0331840338231 1.93722638084577e-17
-# 2    HdL  2 129.179364012134 1.25465435539581e-36
-# 3    FbL  2 134.072236233468 1.53574992055667e-37
-# 4    FtL  2 69.8685997360608 1.09784984851941e-23
-# 5    HbL  2 88.3332519031785 3.79325405037727e-28
-# 6     DS  2 6.79411824634289  0.00140021093431771
-# 7     SL  2 12.6508006828503 6.75401341650696e-06
-# 8     IL  2 17.4427539247313 1.05377991830957e-07
-# 9   SlF3  2 39.7240978635182 3.12496567120983e-15
-# 10  SlT4  2 14.1750621946387 1.76425283457279e-06
-# 11    NS  2  3.0382278432911    0.050159873949019
-# 12    CS  2 4.91359935018432  0.00826642708943327
+#    char DF    F.value      p.value
+# 1    HL  2  47.033184 1.937226e-17
+# 2   HdL  2 129.179364 1.254654e-36
+# 3   FbL  2 134.072236 1.535750e-37
+# 4   FtL  2  69.868600 1.097850e-23
+# 5   HbL  2  88.333252 3.793254e-28
+# 6    DS  2   6.794118 1.400211e-03
+# 7    SL  2  12.650801 6.754013e-06
+# 8    IL  2  17.442754 1.053780e-07
+# 9  SlF3  2  39.724098 3.124966e-15
+# 10 SlT4  2  14.175062 1.764253e-06
+# 11   NS  2   3.038228 5.015987e-02
+# 12   CS  2   4.913599 8.266427e-03
 
 ## Access Tukey test results. The matrix below displays the adjusted p-value for each comparison across characters
 aov.res$tukey_padj_matrix
@@ -369,14 +369,14 @@ kw.res <- kw_dunn(df.unvar, grp = "Pop", write.dunn = TRUE, dir = "dn_morph/")
 
 ## Access the results
 kw.res$kruskal_summary
-#   Morph KW Statistic      p.value
-# 1   SVL   105.301348 1.361767e-23
-# 2    TD    79.382594 5.784804e-18
-# 3    OD    49.241279 2.029514e-11
-# 4    HW    13.339213 1.268898e-03
-# 5    HD    15.847336 3.620719e-04
-# 6   LbS     2.418135 2.984755e-01
-# 7  PoPV    88.679721 5.539151e-20
+#   char KW Statistic      p.value
+# 1  SVL   105.301348 1.361767e-23
+# 2   TD    79.382594 5.784804e-18
+# 3   OD    49.241279 2.029514e-11
+# 4   HW    13.339213 1.268898e-03
+# 5   HD    15.847336 3.620719e-04
+# 6  LbS     2.418135 2.984755e-01
+# 7 PoPV    88.679721 5.539151e-20
 
 kw.res$dunn_padj_matrix
 #           Comparison          SVL           TD           OD          HW
@@ -478,12 +478,12 @@ pca.res$
 # pca.res$ax1.var        pca.res$ax2.var        pca.res$pca.pc.scores  pca.res$pca.var.load 
 
 pca.res$pca.var.load
-#  A tibble: 19 × 20
-#    variable      PC1     PC2     PC3     PC4     PC5     PC6       PC7      PC8
-#    <chr>       <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>     <dbl>    <dbl>
-#  1 SVL       0.312   -0.0440  0.0143  0.0991 -0.0734 -0.0871  0.198    -0.293  
-#  2 TD       -0.297   -0.118  -0.0687 -0.0850 -0.0324  0.0344 -0.0441    0.0809 
-#  3 OD       -0.161   -0.244  -0.297  -0.198   0.142   0.390  -0.243     0.0421 
+# A tibble: 19 × 20
+#    char       PC1     PC2     PC3     PC4     PC5     PC6       PC7      PC8
+#    <chr>    <dbl>   <dbl>   <dbl>   <dbl>   <dbl>   <dbl>     <dbl>    <dbl>
+#  1 SVL    0.312   -0.0440  0.0143  0.0991 -0.0734 -0.0871  0.198    -0.293  
+#  2 TD    -0.297   -0.118  -0.0687 -0.0850 -0.0324  0.0344 -0.0441    0.0809 
+#  3 OD    -0.161   -0.244  -0.297  -0.198   0.142   0.390  -0.243     0.0421 
 
 ## Plot PCA
 

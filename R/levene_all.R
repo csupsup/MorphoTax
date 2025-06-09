@@ -27,7 +27,7 @@ levene_all <- function(data, grp = "Pop") {
 
   ## Initialize an empty data frame to store results
   levene.sum <- data.frame(
-    Morph = character(),
+    char = character(),
     F.value = numeric(),
     p.value = numeric(),
     significance = character(),
@@ -50,7 +50,7 @@ levene_all <- function(data, grp = "Pop") {
       
       ## Add the results to the summary data frame
       levene.sum <- rbind(levene.sum, data.frame(
-        Morph = char,
+        char = char,
         F.value = levene.stat,
         p.value = p.val,
         significance = significance

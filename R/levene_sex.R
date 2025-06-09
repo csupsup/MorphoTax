@@ -35,8 +35,8 @@ levene_sex <- function(data, sex = "Sex", grp = "Pop") {
   
   ## Initialize a data frame to store the results
   levene.sum <- data.frame(
-    Pop = character(),
-    Char = character(),
+    pop = character(),
+    char = character(),
     F.value = numeric(),
     p.value = numeric(),
     significance = character(),
@@ -55,8 +55,8 @@ levene_sex <- function(data, sex = "Sex", grp = "Pop") {
       significance <- ifelse(p.val < 0.05, "*", "")
       
       levene.sum <- rbind(levene.sum, data.frame(
-        Pop = pop,
-        Char = var,
+        pop = pop,
+        char = var,
         F.value = f.val,
         p.value = p.val,
         significance = significance

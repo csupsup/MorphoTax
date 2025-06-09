@@ -32,20 +32,20 @@ summarize_ratio <- function(data, char.as.num, char.as.den, grp) {
 
     ## Create an empty data frame to store results
     ratio.count <- data.frame(
-        Pop = character(0),
-        N = numeric(0),
-        LongCount = numeric(0),
-        ShortCount = numeric(0),
-        LongPct = numeric(0),
-        ShortPct = numeric(0),
-        LongRange = character(0),
-        ShortRange = character(0),
+        pop = character(0),
+        n = numeric(0),
+        longCount = numeric(0),
+        shortCount = numeric(0),
+        longPct = numeric(0),
+        shortPct = numeric(0),
+        longRange = character(0),
+        shortRange = character(0),
         meanLongRatio = numeric(0),
         sdLongRatio = numeric(0),
         meanShortRatio = numeric(0),
         sdShortRatio = numeric(0),
-        ShortRdiff = character(0), 
-        LongRdiff = character(0) 
+        shortRdiff = character(0), 
+        longRdiff = character(0) 
     )
 
     ## Unique populations
@@ -104,20 +104,20 @@ summarize_ratio <- function(data, char.as.num, char.as.den, grp) {
         }
 
         ratio.count <- rbind(ratio.count, data.frame(
-            Pop = pop,
-            N = total_samples,
-            LongCount = above_1,
-            ShortCount = below_1,
-            LongPct = above_1_percent,
-            ShortPct = below_1_percent,
-            LongRange = above_1_range,
-            ShortRange = below_1_range,
+            pop = pop,
+            n = total_samples,
+            longCount = above_1,
+            shortCount = below_1,
+            longPct = above_1_percent,
+            shortPct = below_1_percent,
+            longRange = above_1_range,
+            shortRange = below_1_range,
             meanLongRatio = mean_above_1_ratio,
             sdLongRatio = sd_above_1_ratio,
             meanShortRatio = mean_below_1_ratio,
             sdShortRatio = sd_below_1_ratio,
-            ShortRdiff = below_1_percent_comment,  
-            LongRdiff = above_1_percent_comment
+            shortRdiff = below_1_percent_comment,  
+            longRdiff = above_1_percent_comment
         ))
     }
 

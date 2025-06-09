@@ -68,8 +68,8 @@ wilcox_test_sex <- function(data, sex = "Sex", char = "SVL", grp = "Pop", all = 
       test.res <- wilcox.test(as.formula(paste(char.col, "~", sex)), data = pop.data, exact = FALSE)
 
       test.sum <- rbind(test.sum, data.frame(
-        Char = char.col,
-        Pop = pop,
+        char = char.col,
+        pop = pop,
         W.stat = test.res$statistic,
         p.value = test.res$p.value,
         significance = ifelse(test.res$p.value < 0.05, "*", "")
