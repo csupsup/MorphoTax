@@ -623,4 +623,4 @@ ggsave("pca.svm.png", plot = pca.svm, width = 7, height = 5, dpi = 300)
 ```
 <img src="man/figures/pca.svm.png" width="500"/>
 
-Examine the PCA results above. If one were to rely solely on the 95% ellipse, the Palawan samples would not be considered morphologically distinct, as they overlap with those from Luzon and Mindanao. However, when SVM is applied, the Palawan population is predicted to be morphologically unique. One might argue that this could be an artifact of supervised classification, but we contend that it is not, because in our study (see reference above), several populations were assigned *a priori* (true classes) classes but still were not considered distinct.
+Examine the PCA results above. If one were to rely solely on the 95% ellipse, the Palawan samples would not be considered morphologically distinct, as they overlap with those from Luzon and Mindanao. However, when SVM is applied, the Palawan population is predicted to be morphologically unique.
