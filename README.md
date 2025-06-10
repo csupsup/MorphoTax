@@ -154,7 +154,7 @@ head(ratio.sum)
 # 2 TD is 65% to 78% shorter than SVL        NA
 # 3 TD is 72% to 79% shorter than SVL        NA
 
-## Visualize ratio TD/SVL ratio
+## Visualize TD/SVL ratio
 box <- plot_ratio_box(cleaned.data, char.as.num = "TD", char.as.den = "SVL", grp = "Pop", 
                 y.title = "Tympanum Diameter/\nSnout–Vent Length")
 box
