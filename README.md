@@ -153,7 +153,14 @@ head(ratio.sum)
 # 1 TD is 72% to 84% shorter than SVL        NA
 # 2 TD is 65% to 78% shorter than SVL        NA
 # 3 TD is 72% to 79% shorter than SVL        NA
+
+## Visualize ratio TD/SVL ratio
+box <- plot_ratio_box(cleaned.data, char.as.num = "TD", char.as.den = "SVL", grp = "Pop", 
+                y.title = "Tympanum Diameter/\nSnout–Vent Length")
+box
+ggsave("td.svl.boxplot.png", plot = box, width = 5, height = 5, dpi = 300)
 ```
+<img src="man/figures/td.svl.boxplot.png" width="400"/>
 
 ### 4. Test for normality and homogeneity of variance
 As mentioned above, functions are provided to perform these tests when sex data is available (*shapiro_sex*, *levene_sex*) and when it is not (*shapiro_all*, *levene_all*).
@@ -274,7 +281,7 @@ svl.bar <- plot_errorbar(sex.cleaned.data, char = "SVL", sex = "Sex", grp = "Pop
 svl.bar
 
 ## Write plot to a png file
-ggsave("svl_errorbar.png", plot = svl.bar, width = 5, height = 5, dpi = 300)
+ggsave("svl.errorbar.png", plot = svl.bar, width = 5, height = 5, dpi = 300)
 ```
 <img src="man/figures/svl.errorbar.png" width="400"/>
 
