@@ -116,6 +116,11 @@ adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species"), c
     adjusted_data_list <- adjusted_data
     
     final_data <- adjusted_data_list
+
+    ## Remove column "SVL_log_adj"
+    if (paste0(char, "_log_adj") %in% colnames(final_data)) {
+      final_data[[paste0(char, "_log_adj")]] <- NULL
+    }
   } else if (type == "species") {
     ## Loop over each population
     for (pop in unique(data[, 1])) {
