@@ -8,12 +8,13 @@
 #'
 #' @param data A data frame with population or species label in the first column, followed by SVL and other data.
 #' @param type String. Data type:  "single_pop", "multi_pop" and "species".
+#' @param char String. A character as size reference (e.g., SVL).
 #'
 #' @examples
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' data$Sex <- NULL
 #'
-#' adj.data <- adjust_morph(data, type = "multi_pop")
+#' adj.data <- adjust_morph(data, type = "multi_pop", char = "SVL")
 #' 
 #' head(adj.data)
 #'
@@ -27,8 +28,8 @@
 #' @return A data frame containing the adjusted morphological data.
 #' @export
 
-adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
-    
+adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species"), char = "SVL") {
+  
   ## Option to handle both single population and multiple populations
   type <- match.arg(type)
   
@@ -43,34 +44,34 @@ adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
       ## Subset population
       pop_data <- subset(data, data[, 1] == pop) # Pop
       
-      ## Calculate the mean of SVL for the population
-      SVL_mean <- mean(data$SVL, na.rm = TRUE)
+      ## Calculate the mean of the reference character for the population
+      char_mean <- mean(pop_data[[char]], na.rm = TRUE)
 
-      ## Log-transform SVL
-      pop_data$SVL_log <- log10(pop_data$SVL)
+      ## Log-transform the reference character
+      pop_data[[paste0(char, "_log")]] <- log10(pop_data[[char]])
       
-      ## Loop through all characters (except Pop and SVL)
+      ## Loop through all characters (except Pop and reference character)
       numeric_cols <- sapply(pop_data, is.numeric)
       numeric_cols["Pop"] <- FALSE  
-      numeric_cols["SVL"] <- FALSE 
+      numeric_cols[[char]] <- FALSE 
       
       for (col in names(pop_data)[numeric_cols]) {
         ## Skip columns with missing values
         if (any(is.na(pop_data[[col]]))) next
         
-        ## Calculate the slope (b) using linear regression (log10(X) ~ log10(SVL))
-        model <- lm(log10(pop_data[[col]]) ~ log10(pop_data$SVL))
+        ## Calculate the slope (b) using linear regression (log10(X) ~ log10(reference character))
+        model <- lm(log10(pop_data[[col]]) ~ log10(pop_data[[char]]))
         b <- coef(model)[2]  # slope
         
-        ## Apply body size correction: X_adj = log10(X) - b * (log10(SVL) - log10(SVL_mean))
-        pop_data[[paste0(col, "_adj")]] <- log10(pop_data[[col]]) - b * (log10(pop_data$SVL) - log10(SVL_mean))
+        ## Apply body size correction: X_adj = log10(X) - b * (log10(char) - log10(char_mean))
+        pop_data[[paste0(col, "_adj")]] <- log10(pop_data[[col]]) - b * (log10(pop_data[[char]]) - log10(char_mean))
       }
       
-      ## Combine adjusted data, SVL_log, and Pop to the list
-      adjusted_data <- pop_data[, c("Pop", "SVL_log", grep("_adj", colnames(pop_data), value = TRUE))]
+      ## Combine adjusted data, char_log, and Pop to the list
+      adjusted_data <- pop_data[, c("Pop", paste0(char, "_log"), grep("_adj", colnames(pop_data), value = TRUE))]
       
-      ## Exclude 'SVL_log_adj' if it's included
-      adjusted_data <- adjusted_data[, !grepl("SVL_log_adj", colnames(adjusted_data))]
+      ## Exclude 'char_log_adj' if it's included
+      adjusted_data <- adjusted_data[, !grepl(paste0(char, "_log_adj"), colnames(adjusted_data))]
       
       ## Store adjusted data by population
       adjusted_data_list[[as.character(pop)]] <- adjusted_data
@@ -83,30 +84,33 @@ adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
     ## Obtain data (assuming one population)
     pop_data <- data
     
-    ## Calculate the mean of SVL
-    SVL_mean <- mean(pop_data$SVL, na.rm = TRUE)
+    ## Calculate the mean of the reference character
+    char_mean <- mean(pop_data[[char]], na.rm = TRUE)
     
-    ## Log-transform the SVL
-    pop_data$SVL_log <- log10(pop_data$SVL)
+    ## Log-transform the reference character
+    pop_data[[paste0(char, "_log")]] <- log10(pop_data[[char]])
     
     ## Loop through all characters
     numeric_cols <- sapply(pop_data, is.numeric)
-    numeric_cols["SVL"] <- FALSE  ## Exclude SVL
+    numeric_cols[[char]] <- FALSE  ## Exclude reference character
     
     for (col in names(pop_data)[numeric_cols]) {
       ## Skip columns with missing values
       if (any(is.na(pop_data[[col]]))) next
       
-      ## Calculate the slope (b) using linear regression (log10(X) ~ log10(SVL))
-      model <- lm(log10(pop_data[[col]]) ~ log10(pop_data$SVL))
+      ## Calculate the slope (b) using linear regression (log10(X) ~ log10(reference character))
+      model <- lm(log10(pop_data[[col]]) ~ log10(pop_data[[char]]))
       b <- coef(model)[2]  # slope
       
-      ## Apply body size correction: X_adj = log10(X) - b * (log10(SVL) - log10(SVL_mean))
-      pop_data[[paste0(col, "_adj")]] <- log10(pop_data[[col]]) - b * (log10(pop_data$SVL) - log10(SVL_mean))
+      ## Apply body size correction: X_adj = log10(X) - b * (log10(char) - log10(char_mean))
+      pop_data[[paste0(col, "_adj")]] <- log10(pop_data[[col]]) - b * (log10(pop_data[[char]]) - log10(char_mean))
     }
     
-    ## Combine adjusted data, SVL_log, and Pop to the list
-    adjusted_data <- pop_data[, c("SVL_log", grep("_adj", colnames(pop_data), value = TRUE))]
+    ## Add a Pop column if missing
+    if (!"Pop" %in% names(pop_data)) pop_data$Pop <- "Population_1"
+    
+    ## Combine adjusted data, char_log, and Pop to the list
+    adjusted_data <- pop_data[, c("Pop", paste0(char, "_log"), grep("_adj", colnames(pop_data), value = TRUE))]
     
     ## Store adjusted data
     adjusted_data_list <- adjusted_data
@@ -118,34 +122,34 @@ adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
       ## Subset population
       pop_data <- subset(data, data[, 1] == pop) # Pop
       
-      ## Calculate the mean of SVL for the population
-      SVL_mean <- mean(pop_data$SVL, na.rm = TRUE)
+      ## Calculate the mean of the reference character for the population
+      char_mean <- mean(pop_data[[char]], na.rm = TRUE)
 
-      ## Log-transform SVL
-      pop_data$SVL_log <- log10(pop_data$SVL)
+      ## Log-transform the reference character
+      pop_data[[paste0(char, "_log")]] <- log10(pop_data[[char]])
       
-      ## Loop through all characters (except Pop and SVL)
+      ## Loop through all characters (except Pop and reference character)
       numeric_cols <- sapply(pop_data, is.numeric)
       numeric_cols["Pop"] <- FALSE  
-      numeric_cols["SVL"] <- FALSE 
+      numeric_cols[[char]] <- FALSE 
       
       for (col in names(pop_data)[numeric_cols]) {
         ## Skip columns with missing values
         if (any(is.na(pop_data[[col]]))) next
         
-        ## Calculate the slope (b) using linear regression (log10(X) ~ log10(SVL))
-        model <- lm(log10(pop_data[[col]]) ~ log10(pop_data$SVL))
+        ## Calculate the slope (b) using linear regression (log10(X) ~ log10(reference character))
+        model <- lm(log10(pop_data[[col]]) ~ log10(pop_data[[char]]))
         b <- coef(model)[2]  # slope
         
-        ## Apply body size correction: X_adj = log10(X) - b * (log10(SVL) - log10(SVL_mean))
-        pop_data[[paste0(col, "_adj")]] <- log10(pop_data[[col]]) - b * (log10(pop_data$SVL) - log10(SVL_mean))
+        ## Apply body size correction: X_adj = log10(X) - b * (log10(char) - log10(char_mean))
+        pop_data[[paste0(col, "_adj")]] <- log10(pop_data[[col]]) - b * (log10(pop_data[[char]]) - log10(char_mean))
       }
       
-      ## Combine adjusted data, SVL_log, and Pop to the list
-      adjusted_data <- pop_data[, c("Pop", "SVL_log", grep("_adj", colnames(pop_data), value = TRUE))]
+      ## Combine adjusted data, char_log, and Pop to the list
+      adjusted_data <- pop_data[, c("Pop", paste0(char, "_log"), grep("_adj", colnames(pop_data), value = TRUE))]
       
-      ## Exclude 'SVL_log_adj' if it's included
-      adjusted_data <- adjusted_data[, !grepl("SVL_log_adj", colnames(adjusted_data))]
+      ## Exclude 'char_log_adj' if it's included
+      adjusted_data <- adjusted_data[, !grepl(paste0(char, "_log_adj"), colnames(adjusted_data))]
       
       ## Store adjusted data by population
       adjusted_data_list[[as.character(pop)]] <- adjusted_data
@@ -153,7 +157,6 @@ adjust_morph <- function(data, type = c("multi_pop", "single_pop", "species")) {
     
     ## Convert adjusted data into one dataframe
     final_data <- bind_rows(adjusted_data_list)
-    
   }
 
   ## Clean column names by removing "_log" and "_adj" from the names

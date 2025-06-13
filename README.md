@@ -107,7 +107,7 @@ head(mensural)
 mensural$Sex <- NULL ## Exclude sex data
 
 ## Apply the adjustment
-adj.data <- adjust_morph(mensural, type = "multi_pop") # Use multi-population option. Adjust according to your data
+adj.data <- adjust_morph(mensural, type = "multi_pop", char = "SVL") # Use multi-population option. Adjust according to your data
 
 head(adj.data)
 #     Pop      SVL        TD        OD       HW       HD       HL      HdL

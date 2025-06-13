@@ -4,12 +4,18 @@
 \alias{adjust_morph}
 \title{Remove Allometric Effects}
 \usage{
-adjust_morph(data, type = c("multi_pop", "single_pop", "species"))
+adjust_morph(
+  data,
+  type = c("multi_pop", "single_pop", "species"),
+  char = "SVL"
+)
 }
 \arguments{
 \item{data}{A data frame with population or species label in the first column, followed by SVL and other data.}
 
 \item{type}{String. Data type:  "single_pop", "multi_pop" and "species".}
+
+\item{char}{String. A character as size reference (e.g., SVL).}
 }
 \value{
 A data frame containing the adjusted morphological data.
@@ -25,7 +31,7 @@ The \emph{"species"} option considers each unique group as a single species; the
 data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 data$Sex <- NULL
 
-adj.data <- adjust_morph(data, type = "multi_pop")
+adj.data <- adjust_morph(data, type = "multi_pop", char = "SVL")
 
 head(adj.data)
 
