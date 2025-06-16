@@ -4,7 +4,13 @@
 \alias{plot_pca}
 \title{Plot Principal Component Analysis}
 \usage{
-plot_pca(data, fixed.shape = NULL, point.color = NULL, ellipse = TRUE)
+plot_pca(
+  data,
+  fixed.shape = NULL,
+  point.color = NULL,
+  ellipse = TRUE,
+  pop.order = NULL
+)
 }
 \arguments{
 \item{data}{A data frame with population or species label in the first column, followed by morpholigcal data.}
@@ -14,6 +20,8 @@ plot_pca(data, fixed.shape = NULL, point.color = NULL, ellipse = TRUE)
 \item{point.color}{A vector specifying the point color for each population or species. If NULL, random colors will be used}
 
 \item{ellipse}{Logical. If TRUE, it adds 95\% confidence ellipses. Default TRUE.}
+
+\item{pop.order}{A vector specifying the order of populations to be shown in the plot legend.}
 }
 \value{
 A biplot showing the results of FDA.
@@ -27,9 +35,10 @@ data$Sex <- NULL
 
 point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)
 point.color <- c("Luzon" = "#000000", "Mindanao" = "#FF7F0E", "Palawan" = "#D62728")
+pop <- c("Palawan", "Mindanao", "Luzon")
 
 pca.plot <- plot_pca(data, point.color = point.color, 
-                              fixed.shape = point.shape)
+                              fixed.shape = point.shape, ellipse = FALSE, pop.order = pop)
 pca.plot
 
 }

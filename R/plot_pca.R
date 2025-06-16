@@ -6,6 +6,7 @@
 #' @param fixed.shape A vector specifying the point shape for each population or species. If NULL, random points will be used.
 #' @param point.color A vector specifying the point color for each population or species. If NULL, random colors will be used
 #' @param ellipse Logical. If TRUE, it adds 95% confidence ellipses. Default TRUE.
+#' @param pop.order A vector specifying the order of populations to be shown in the plot legend.
 #'
 #' @examples
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
@@ -13,9 +14,10 @@
 #'
 #' point.shape <- c("Luzon" = 8, "Mindanao" = 11, "Palawan" = 10)
 #' point.color <- c("Luzon" = "#000000", "Mindanao" = "#FF7F0E", "Palawan" = "#D62728")
+#' pop <- c("Palawan", "Mindanao", "Luzon")
 #'
 #' pca.plot <- plot_pca(data, point.color = point.color, 
-#'                               fixed.shape = point.shape)
+#'                               fixed.shape = point.shape, ellipse = FALSE, pop.order = pop)
 #' pca.plot
 #'
 #' @importFrom stats prcomp
@@ -28,7 +30,7 @@
 #' @return A biplot showing the results of FDA.
 #' @export
 
-plot_pca <- function(data, fixed.shape = NULL, point.color = NULL, ellipse = TRUE) {
+plot_pca <- function(data, fixed.shape = NULL, point.color = NULL, ellipse = TRUE, pop.order = NULL) {
   ## Ensure 'data' is a data frame and has the necessary columns
   if (!is.data.frame(data)) stop("The input data must be a data frame")
   
@@ -64,6 +66,11 @@ plot_pca <- function(data, fixed.shape = NULL, point.color = NULL, ellipse = TRU
     names(point.shape) <- pop.lab
   } else {
     point.shape <- fixed.shape[as.character(pop.lab)]
+  }
+
+  ## Order population
+  if (!is.null(pop.order)) {
+    pca.data$grp <- factor(pca.data$grp, levels = pop.order)
   }
 
   ## Plot PCA
