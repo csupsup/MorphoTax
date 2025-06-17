@@ -7,12 +7,15 @@
 #' @param sex String. Column name for sex information, specifying male and female.
 #' @param char String. Column name for morphological character to test.
 #' @param grp String. Column name for population or species.
-#' @param test String. Specify which test to use ("t-test", "wilcox", "none"). 
+#' @param test String. Specify which test to use ("t-test", "wilcox", "none").
+#' @param pop.order A vector specifying the order of populations to be shown in the plot legend.
 #'
 #' @examples
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
-#'
-#' svl.bar <- plot_errorbar(data, char = "SVL", sex = "Sex", grp = "Pop", test = "t-test")
+#' pop <- c("Luzon", "Palawan", "Mindanao")
+#' 
+#' svl.bar <- plot_errorbar(data, char = "SVL", sex = "Sex", 
+#'              grp = "Pop", test = "t-test", pop.order = pop)
 #' 
 #' svl.bar
 #'
@@ -25,7 +28,8 @@
 #' 
 #' @export
 
-plot_errorbar <- function(data, char = "SVL", sex = "Sex", grp = "Pop", test = c("t-test", "wilcox", "none")) {
+plot_errorbar <- function(data, char = "SVL", sex = "Sex", grp = "Pop", 
+                          test = c("t-test", "wilcox", "none"), pop.order = NULL) {
   test <- match.arg(test)
   
   ## Check required columns exist
@@ -79,8 +83,16 @@ plot_errorbar <- function(data, char = "SVL", sex = "Sex", grp = "Pop", test = c
     sig_annotations[[grp]] <- sig_annotations$grp_val
   }
   
+  ## Order population
+  if (!is.null(pop.order)) {
+    df.sum[[grp]] <- factor(df.sum[[grp]], levels = pop.order)
+    if (nrow(sig_annotations) > 0) {
+      sig_annotations[[grp]] <- factor(sig_annotations[[grp]], levels = pop.order)
+    }
+  }
+
   ## Plot
-  plot_obj <- ggplot(df.sum, aes_string(x = grp, y = char, colour = sex, group = sex)) +
+  plot_obj <- ggplot(df.sum, aes(x = !!sym(grp), y = !!sym(char), colour = !!sym(sex), group = !!sym(sex))) +
     theme_classic() +
     geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0.1) +
     geom_line(linewidth = 1) +
@@ -99,16 +111,16 @@ plot_errorbar <- function(data, char = "SVL", sex = "Sex", grp = "Pop", test = c
       axis.text.y = element_text(size = 12),
       axis.title.x = element_blank()
     )
-  
+
   ## Add significance asterisks if any
   if (nrow(sig_annotations) > 0) {
     plot_obj <- plot_obj + geom_text(data = sig_annotations, 
-                                    aes_string(x = grp, y = "y", label = "label"), 
-                                    inherit.aes = FALSE, size = 6, vjust = 0)
+                                     aes(x = !!sym(grp), y = y, label = label), 
+                                     inherit.aes = FALSE, size = 6, vjust = 0)
   }
-  
+
   return(plot_obj)
 }
 
 ## Declare
-utils::globalVariables(c("ymin", "ymax"))
+utils::globalVariables(c("ymin", "ymax" ,"y", "label"))

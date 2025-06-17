@@ -9,7 +9,8 @@ plot_errorbar(
   char = "SVL",
   sex = "Sex",
   grp = "Pop",
-  test = c("t-test", "wilcox", "none")
+  test = c("t-test", "wilcox", "none"),
+  pop.order = NULL
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ plot_errorbar(
 \item{grp}{String. Column name for population or species.}
 
 \item{test}{String. Specify which test to use ("t-test", "wilcox", "none").}
+
+\item{pop.order}{A vector specifying the order of populations to be shown in the plot legend.}
 }
 \description{
 A function for creating an error bar plot and test differences in characters between
@@ -29,8 +32,10 @@ sexes within each population using the T-test and Wilcoxon test.
 }
 \examples{
 data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
+pop <- c("Luzon", "Palawan", "Mindanao")
 
-svl.bar <- plot_errorbar(data, char = "SVL", sex = "Sex", grp = "Pop", test = "t-test")
+svl.bar <- plot_errorbar(data, char = "SVL", sex = "Sex", 
+             grp = "Pop", test = "t-test", pop.order = pop)
 
 svl.bar
 
