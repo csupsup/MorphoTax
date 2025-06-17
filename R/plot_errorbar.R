@@ -9,13 +9,14 @@
 #' @param grp String. Column name for population or species.
 #' @param test String. Specify which test to use ("t-test", "wilcox", "none").
 #' @param pop.order A vector specifying the order of populations to be shown in the plot legend.
+#' @param asterisk Logical. If TRUE, it adds an asterisk to the plot to indicate a significant result.
 #'
 #' @examples
 #' data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 #' pop <- c("Luzon", "Palawan", "Mindanao")
 #' 
 #' svl.bar <- plot_errorbar(data, char = "SVL", sex = "Sex", 
-#'              grp = "Pop", test = "t-test", pop.order = pop)
+#'              grp = "Pop", test = "t-test", pop.order = pop, asterisk = TRUE)
 #' 
 #' svl.bar
 #'
@@ -29,7 +30,9 @@
 #' @export
 
 plot_errorbar <- function(data, char = "SVL", sex = "Sex", grp = "Pop", 
-                          test = c("t-test", "wilcox", "none"), pop.order = NULL) {
+                          test = c("t-test", "wilcox", "none"), 
+                          pop.order = NULL, 
+                          asterisk = TRUE) {
   test <- match.arg(test)
   
   ## Check required columns exist
@@ -48,8 +51,8 @@ plot_errorbar <- function(data, char = "SVL", sex = "Sex", grp = "Pop",
   df.sum$ymax <- df.sum[[char]] + df.sum$se
   
   sig_annotations <- data.frame()
-  
-  if (test != "none") {
+
+  if (asterisk && test != "none") {
     group_levels <- unique(data[[grp]])
     
     for (g in group_levels) {
@@ -105,15 +108,15 @@ plot_errorbar <- function(data, char = "SVL", sex = "Sex", grp = "Pop",
       axis.text = element_text(size = 15, color = "black"), 
       axis.title = element_text(size = 15, face = "bold"), 
       legend.text = element_text(size = 15),
-      legend.position = c(0.80, 0.95),
+      legend.position.inside = c(0.80, 0.95),
       legend.background = element_blank(),
       axis.text.x = element_text(angle = 50, hjust = 1),
       axis.text.y = element_text(size = 12),
       axis.title.x = element_blank()
     )
 
-  ## Add significance asterisks if any
-  if (nrow(sig_annotations) > 0) {
+  ## Add significance asterisks if enabled and present
+  if (asterisk && nrow(sig_annotations) > 0) {
     plot_obj <- plot_obj + geom_text(data = sig_annotations, 
                                      aes(x = !!sym(grp), y = y, label = label), 
                                      inherit.aes = FALSE, size = 6, vjust = 0)

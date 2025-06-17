@@ -10,7 +10,8 @@ plot_errorbar(
   sex = "Sex",
   grp = "Pop",
   test = c("t-test", "wilcox", "none"),
-  pop.order = NULL
+  pop.order = NULL,
+  asterisk = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ plot_errorbar(
 \item{test}{String. Specify which test to use ("t-test", "wilcox", "none").}
 
 \item{pop.order}{A vector specifying the order of populations to be shown in the plot legend.}
+
+\item{asterisk}{Logical. If TRUE, it adds an asterisk to the plot to indicate a significant result.}
 }
 \description{
 A function for creating an error bar plot and test differences in characters between
@@ -35,7 +38,7 @@ data <- read.csv(system.file("extdata", "herp.data.csv", package = "MorphoTax"))
 pop <- c("Luzon", "Palawan", "Mindanao")
 
 svl.bar <- plot_errorbar(data, char = "SVL", sex = "Sex", 
-             grp = "Pop", test = "t-test", pop.order = pop)
+             grp = "Pop", test = "t-test", pop.order = pop, asterisk = TRUE)
 
 svl.bar
 
