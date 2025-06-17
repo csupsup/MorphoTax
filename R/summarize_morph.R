@@ -56,7 +56,6 @@ summarize_morph <- function(data, grp = NULL) {
       sd_val <- round(sd(vals, na.rm = TRUE), 4)
       Q1 <- round(quantile(vals, 0.25, na.rm = TRUE), 4)
       Q3 <- round(quantile(vals, 0.75, na.rm = TRUE), 4)
-      iqr_range <- paste0(Q1, "\u2013", Q3)
       
       stats <- list(
         pop = group_name,
@@ -65,8 +64,10 @@ summarize_morph <- function(data, grp = NULL) {
         min = min_val,
         median = median_val,
         max = max_val,
-        mean_sd = sprintf("%.4f \u00b1 %.4f", mean_val, sd_val),
-        iqr_range = iqr_range
+        mean = mean_val,
+        sd = sd_val,
+        Q1 = Q1,
+        Q3 = Q3
       )
       
       results[[length(results) + 1]] <- stats
@@ -79,4 +80,3 @@ summarize_morph <- function(data, grp = NULL) {
   ## Return data summary
   return(df)
 }
-
