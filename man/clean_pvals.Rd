@@ -5,8 +5,9 @@
 \title{Clean P-values}
 \usage{
 clean_pvals(
-  tk.dir = "tk_path",
-  dn.dir = "dn_path",
+  tk.dir = NULL,
+  dn.dir = NULL,
+  ch.dir = NULL,
   output.file = "cleaned_pvalues.csv",
   asterisk = TRUE
 )
@@ -16,6 +17,8 @@ clean_pvals(
 
 \item{dn.dir}{A directory that stores the results of the Dunn test.}
 
+\item{ch.dir}{A directory that stores the results of the Chi-square test.}
+
 \item{output.file}{A directory where the output csv file will be stored.}
 
 \item{asterisk}{Logical (TRUE or FALSE). If TRUE, it adds an asterisk symbol to a significant p-value.}
@@ -24,15 +27,15 @@ clean_pvals(
 A data frame containing p-values for all population or species comparisons.
 }
 \description{
-A function to clean and put together all the p-values from the functions "aov_tukey" and "kw_dunn".
-All input CSV files should be located in a folder where each file has a prefix "tk_" for Tukey test results and "dn_" for Dunn test.
-Each file contains the results of a test on a certain character, for example, "tk_SVL_results.csv."
+A function to clean and put together all the p-values from the functions "aov_tukey", "kw_dunn" and mc_chisq_test.
+All input CSV files should be located in a folder where each file has a prefix "tk_" for Tukey test results, "dn_" for Dunn
+and "chi_" for Chi-square tests. Each file contains the results of a test on a certain character, for example, "tk_SVL_results.csv."
 }
 \examples{
 tk_dir <- system.file("extdata", "tk_res", package = "MorphoTax")
 dn_dir <- system.file("extdata", "dn_res", package = "MorphoTax")
 
-clean_pvals(tk.dir = tk_dir, dn.dir = dn_dir, 
+clean_pvals(tk.dir = tk_dir, dn.dir = dn_dir, ch.dir = NULL,
          output.file = "cleaned_pvals.csv", asterisk = FALSE)
 
 }

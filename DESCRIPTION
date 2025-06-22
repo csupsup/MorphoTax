@@ -1,9 +1,9 @@
 Package: MorphoTax
-Title: Functions for Morphological Analysis
+Title: MorphoTax
 Version: 0.0.1
 Authors@R: 
-    person("Christian", "Supsup", , "supsupchristian@gmail.com", role = c("aut", "cre"))
-Description: A set of functions developed to analyze morphological data for taxonomic studies.
+    person(given = "Christian", family = "Supsup", role = c("aut", "cre"), email =  "supsupchristian@gmail.com")
+Description: This R package contains a collection of functions compiled to provide a transparent and reproducible pipeline for analyzing morphological data in taxonomic studies.
 License: MIT + file LICENSE
 Imports:
     ggplot2,
@@ -19,7 +19,11 @@ Imports:
     magrittr,
     Rmisc,
     rlang,
-    reshape2
+    reshape2,
+    rcompanion,
+    grid,
+    ggtext,
+    ggnewscale
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

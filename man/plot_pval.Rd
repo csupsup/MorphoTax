@@ -4,12 +4,14 @@
 \alias{plot_pval}
 \title{Plot P-values}
 \usage{
-plot_pval(data, dot.val = TRUE)
+plot_pval(data, dot.val = TRUE, sort = TRUE)
 }
 \arguments{
 \item{data}{A data frame with p-values of comparisons.}
 
 \item{dot.val}{Logical. If TRUE, it adds p-values within the dot.}
+
+\item{sort}{Logical.If TRUE, sorts the rows and columns.}
 }
 \description{
 A function for creating a dot plot to compare p-values.
@@ -17,6 +19,6 @@ A function for creating a dot plot to compare p-values.
 \examples{
 data <- read.csv(system.file("extdata", "cleaned.pvals.csv", package = "MorphoTax"))
 
-pval_plot <- plot_pval(data, dot.val = TRUE)
+pval.plot <- plot_pval(data, dot.val = TRUE, sort = TRUE)
 
 }
