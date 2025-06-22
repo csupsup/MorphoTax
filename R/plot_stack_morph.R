@@ -26,22 +26,22 @@
 
 plot_stack_morph <- function(data, add.num = TRUE, flip = FALSE, sort = FALSE) {
 
-  # Convert to long format for character-wise analysis
+  ## Convert to long format for character-wise analysis
   data_long <- melt(data, id.vars = "comparisons",
                               variable.name = "character", value.name = "p_value")
 
-  # Convert p_value to numeric
+  ## Convert p_value to numeric
   data_long$p_value <- as.numeric(data_long$p_value)
 
-  # Determine significance
+  ## Determine significance
   data_long$Significance <- ifelse(data_long$p_value < 0.05, "Significant", "Non-significant")
 
-  # Count significance by character
+  ## Count significance by character
   char_counts <- data_long %>%
     group_by(character, Significance) %>%
     summarise(count = n(), .groups = "drop")
 
-  # Prepare wide format to count significance types per character
+  ## Prepare wide format to count significance types per character
   sig_summary <- data_long %>%
     group_by(character) %>%
     summarise(
@@ -50,16 +50,16 @@ plot_stack_morph <- function(data, add.num = TRUE, flip = FALSE, sort = FALSE) {
       .groups = "drop"
     )
 
-  # Sort
+  ## Sort
   if (sort) {
     sig_summary <- sig_summary[order(-sig_summary$less_0.05), ]
   }
 
-  # Reverse factor levels so that most significant is at the top on y-axis
+  ## Reverse factor levels so that most significant is at the top on y-axis
   char_levels <- rev(sig_summary$character)
   char_counts$character <- factor(char_counts$character, levels = char_levels)
 
-  # Create plot
+  ## Create plot
   p <- ggplot(char_counts, aes(y = character, x = count, fill = Significance)) +
     geom_bar(stat = "identity") +
     labs(title = "", x = "Number of Comparisons", y = "Character") +
@@ -80,7 +80,7 @@ plot_stack_morph <- function(data, add.num = TRUE, flip = FALSE, sort = FALSE) {
       axis.title = element_text(size = 20)
     )
 
-  # Add labels
+  ## Add labels
   if (add.num) {
     p <- p + geom_text(
       aes(label = count),
@@ -90,7 +90,7 @@ plot_stack_morph <- function(data, add.num = TRUE, flip = FALSE, sort = FALSE) {
     )
   }
 
-  # Flip axes and tilt labels
+  ## Flip axes and tilt labels
   if (flip) {
     p <- p +
       coord_flip() +
