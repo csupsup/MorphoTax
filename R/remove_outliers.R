@@ -20,10 +20,6 @@
 #' @return A filtered data frame.
 #' @export
 
-#' @importFrom stats quantile
-#' @return A filtered data frame.
-#' @export
-
 remove_outliers <- function(data, char = "SVL", grp = NULL, q1 = 0.25, q3 = 0.75) {
   if (is.null(grp)) {
     ## If no group is provided, treat all data as one group

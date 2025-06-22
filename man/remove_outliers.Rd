@@ -19,8 +19,6 @@ remove_outliers(data, char = "SVL", grp = NULL, q1 = 0.25, q3 = 0.75)
 }
 \value{
 A filtered data frame.
-
-A filtered data frame.
 }
 \description{
 A function to remove outliers based on interquartile range method.
