@@ -80,28 +80,31 @@ run_fda_svm <- function(data, point.shape = NULL, class.color = NULL, pop.order 
   ## Plot decision boundaries on FDA dimensions
   plotobj <- ggplot() +
     geom_tile(data = grid, aes(x = FDA1, y = FDA2, fill = Predicted), alpha = 0.5) +
-    geom_point(data = fda_axes, aes(x = FDA1, y = FDA2, shape = Pop, color = Pop), size = 3, color = "black") +
+    geom_point(data = fda_axes, aes(x = FDA1, y = FDA2, shape = Pop), size = 3, color = "black") +
     scale_shape_manual(values = point.shape) +
     scale_fill_manual(values = class.color) +
     labs(
       title = "SVM Decision Boundary with FDA Components",
       x = "FDA Dimension 1",
-      y = "FDA Dimension 2",
-      color = "",
-      shape = "True Class",
-      fill = "Predicted Class"
+      y = "FDA Dimension 2"
+    ) +
+    guides(
+      shape = guide_legend(order = 1, title = "True Class"),
+      fill = guide_legend(order = 2, title = "Predicted Class")
     ) +
     theme_classic() +
-    theme(legend.key = element_blank(),
-          legend.title = element_text(size = 15),
-          panel.background = element_blank(),
-          legend.position = "right",
-          legend.key.width = unit(1, "cm"),
-          legend.key.height = unit(0.3, "cm"),
-          legend.text = element_text(size = 15),
-          plot.title = element_blank(),
-          axis.text = element_text(size = 15, color = "black"),
-          axis.title = element_text(size = 15)) +
+    theme(
+      legend.key = element_blank(),
+      legend.title = element_text(size = 15),
+      panel.background = element_blank(),
+      legend.position = "right",
+      legend.key.width = unit(1, "cm"),
+      legend.key.height = unit(0.3, "cm"),
+      legend.text = element_text(size = 15),
+      plot.title = element_blank(),
+      axis.text = element_text(size = 15, color = "black"),
+      axis.title = element_text(size = 15)
+    ) +
     scale_y_continuous(breaks = scales::breaks_pretty()) +
     scale_x_continuous(breaks = scales::breaks_pretty()) 
 
